@@ -1,1 +1,2 @@
-SECRET_KAY = '2aba95775934a16fea5a63fe33c17661210e93202ff9a1965ad5364eccac87df'
+"""
+"""
