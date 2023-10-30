@@ -1,0 +1,226 @@
+html { font-family: sans-serif; 
+
+    
+    
+        --s: 90px; /* */
+        
+        --_g: #110f0f 90deg,rgb(115, 115, 115) 0;
+        background: 
+            conic-gradient(from 90deg at 1px 1px,var(--_g)),
+            conic-gradient(from 90deg at 1px 1px,var(--_g));
+        background-size: var(--s) var(--s), calc(var(--s)/5) calc(var(--s)/5) ;
+      
+      
+      
+
+
+
+    padding: 1rem; 
+    
+    }
+
+
+body { max-width: 1000px; margin: 0 auto;
+     
+    background: rgb(14, 15, 18);
+     
+    }
+h1 { font-family: serif; color: #c4c8cb; margin: 1rem 0; }
+
+a { color: #a6bccb; }
+hr { border: none; border-top: 1px solid lightgray; }
+nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; }
+nav h1 { flex: auto; margin: 0; }
+nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
+nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
+nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
+.content { padding: 0 1rem 1rem; }
+.content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; }
+.content > header h1 { flex: auto; margin: 1rem 0 0.25rem 0; }
+.flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; }
+.post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
+.post > header > div:first-of-type { flex: auto; }
+.post > header h1 { font-size: 1.5em; margin-bottom: 0; }
+.post .about { color: slategray; font-style: italic; }
+.post .body { white-space: pre-line; }
+.content:last-child { margin-bottom: 0; }
+.content form { margin: 1em 0; display: flex; flex-direction: column; }
+.content label { font-weight: bold; margin-bottom: 0.5em; }
+.content input, .content textarea { margin-bottom: 1em; }
+.content textarea { min-height: 12em; resize: vertical; }
+input.danger { color: #cc2f2e; }
+input[type=submit] { align-self: start; min-width: 10em; }
+
+
+#conf_inicial {
+    
+    padding: 20px; 
+    border: 1px solid #000000; 
+    color: rgb(195, 199, 199); 
+}
+
+#conf_inicial label {
+    font-weight: 200;
+    font-size:large;
+    font-family: 'Times New Roman', serif;
+}
+
+#conf_inicial input[type="text"], #conf_inicial select {
+    width: 10%; /* Hace que los campos de texto y los selects ocupen todo el ancho del contenedor */
+    margin-bottom: 10px; /* Agrega un margen inferior de 10px a los campos de entrada y selects */
+}
+
+#conf_inicial select {
+    padding: 5px; /* Agrega un relleno a los selects */
+}
+
+#conf_inicial select option {
+    font-weight: normal; /* Restaura el peso de fuente normal para las opciones de select */
+}
+
+
+
+.configuracion-grafica {
+    float: left; /* Hace que el div de configuración de la gráfica de pastel se ajuste a la izquierda */
+}
+
+
+.container {
+    display: flex;
+    align-items: center;
+    color: #cadfec;
+    font-family: 'Times New Roman', serif;
+    font-size: large;
+    background-color: #000000;
+    
+    
+}
+
+.image-container {
+    flex: 1; /* Ocupa 1/2 del espacio disponible */
+}
+
+.config-container {
+    flex: 1; /* Ocupa 1/2 del espacio disponible */
+    padding: 20px; /* Agrega espaciado alrededor del contenido de configuración */
+    
+}
+
+.config-container input {
+    margin-bottom: 20px;
+    background-color: #555558; /* Cambia el color de fondo de los campos de entrada a gris claro */
+    color: #d5d5d5; /* Cambia el color del texto a gris oscuro */
+    border: 1px solid #999; /* Cambia el color del borde a gris claro */
+    border-radius: 5px; /* Agrega bordes redondeados */
+    padding: 5px; /* Añade un relleno interior de 10px */
+    font-size: 16px; /* Cambia el tamaño del texto */
+}
+.config-container select{
+    background-color: #333;
+    color: #c4c8cb;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+
+
+
+/* */
+
+#footer {
+    display: flex;
+    justify-content: space-around; /* Distribuye las secciones equitativamente en el espacio disponible */
+    padding: 20px;
+    background-color: #333; /* Cambia el color de fondo según tu preferencia */
+    color: #fff; /* Cambia el color del texto según tu preferencia */
+}
+
+.footer-section {
+    flex: 1; /* Ocupa 1/3 del espacio disponible */
+    padding: 10px;
+}
+
+.footer-section h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 5px;
+}
+
+.footer-section a {
+    color: #fff; /* Cambia el color de los enlaces según tu preferencia */
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+
+
+.opciones_ads {
+   
+    padding: 20px;
+    border: #333;
+}
+
+.opciones_ads label {
+    
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+
+    color: #a1a8ac;
+
+
+}
+.opciones_ads input {
+    width: 10%;
+    margin-bottom: 10px;
+   
+}
+.opciones_ads select {
+    margin-bottom: 10px;
+}
+
+
+
+.settings {
+    background-color: #cac8c3; 
+    padding: 20px; 
+    border: 1px solid #c6bfbf; 
+}
+
+.settings label {
+    font-weight: bold; /* Hace que las etiquetas de formulario sean negritas */
+    color: #a1a8ac;
+    margin-bottom: 10px;
+}
+.settings input{
+    width: 10%; /* Hace que los campos de texto y los selects ocupen todo el ancho del contenedor */
+    margin-bottom: 10px; /* Agrega un margen inferior de 10px a los campos de entrada y selects */
+    
+}
+
+
+
+
+#formulario {
+    width: 100%; /* Establece un ancho fijo del 80% del ancho de la ventana */
+    /* O bien, puedes usar max-width para limitar el ancho máximo */
+    /* max-width: 800px; /* Establece un ancho máximo de 800 píxeles */
+    margin: 0 auto; /* Centra el div horizontalmente en la pantalla */
+}
+
+
+
+.colores {
+    background-color: #111016;
+}
+
+

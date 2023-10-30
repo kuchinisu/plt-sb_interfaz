@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Gráficas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <h1>Generador de Gráficas</h1>
+
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('matplt.gener') }}">
+        <div name="formulario" id="formulario">
+            
+        <div id="conf_inicial" class="colores">
+         
+                <label for="archivo">Subir archivo CSV o Excel:</label>
+                <input type="file" name="archivo" accept=".csv, .xlsx">
+                <input type="text" name="array_escondido" id="array_escondido" {% if array %} value="{{ array }}" {% endif %} style="display: none;">
+                <input type="text" name="uii_oculto" id="uii_oculto" value="{{ uuid_r }}" style="display: none;">
+            
+            <div>
+                
+                <div>
+                    <label for="filas">Filas</label>
+                    <input type="text" name="filas" value="{{ filas_ }}"  required>
+                </div>
+                <div>
+                    <label for="columnas">Columnas:</label>
+                    <input type="text" name="columnas" value="{{ columnas_ }}" required>
+                </div>
+
+
+                <label for="tipo_grafica">Tipo de Gráfica:</label>
+                <select name="tipo_grafica">
+                    <option value="--">---</option>
+                    <option value="barras" {% if tipo_grafica_seleccionada == 'barras' %}selected{% endif %}>Gráfico de Barras</option>
+                    <option value="dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %}selected{% endif %}>Gráfico de Dispersión</option>
+                    <option value="pastel" {% if tipo_grafica_seleccionada == 'pastel' %}selected{% endif %}>Gráfico de Pastel</option>
+                </select>
+            </div>
+
+        </div>
+            <!-- Opciones para Gráfico de Barras -->
+            <div id="opciones_barras" style="display: none;" class="colores">
+                <!-- Campos de entrada para opciones de gráfica de barras -->
+                
+                <label for="colores">colores</label>
+                <select name="barras_colores_por">
+                    <option value="--" >--</option>
+                    <option value="rango" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(0))  %}selected{% endif %}>
+                        rango
+                    </option>
+                    <option value="lista" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(1))  %}selected{% endif %}> lista </option>
+                </select>
+                
+                <div id="barras_color_cmap" style="display: none;">
+                    <select name="barras_select_cmap">
+                        <option value="pink" {% if tipo_grafica_seleccionada == 'barras' and opciones[0] == 'pink' %}selected{% endif %}>rosa</option>
+                        <option value="bone" {% if tipo_grafica_seleccionada == 'barras' and opciones[0] == 'bone' %}selected{% endif %}>hueso</option>
+                        <option value="Blues" {% if tipo_grafica_seleccionada == 'barras' and opciones[0] == 'Blues' %}selected{% endif %}>azul</option>
+                        <option value="Reds" {% if tipo_grafica_seleccionada == 'barras' and opciones[0] == 'Reds' %}selected{% endif %}>rojo</option>
+                        <option value="inferno" {% if tipo_grafica_seleccionada == 'barras' and opciones[0] == 'inferno' %}selected{% endif %}>infierno</option>
+                    </select>
+                </div>
+                <div id="barras_color_list" style="display: none;">
+                    <label for="_barras_mapa_de_color" >lista</label>
+                    <input type="text" name="_barras_mapa_de_color_inp" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(1)) %}value="{{ opciones_ads[0] }}"{% endif %}>
+                </div>
+
+                <label for="barras_y_label">etiqueta en y</label>
+                <input type="text" name="barras_y_label" id="barras_y_label" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[1] }}"{% endif %}>
+                <label for="barras_x_label">etiqueta en x</label>
+                <input type="text" name="barras_x_label" id="barras_x_label" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[2] }}"{% endif %}>
+                    
+                <label for="barras_figsize">dimensiones</label>
+                <input type="text" name="barras_figsize" id="barras_figsize" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[3] }}"{% endif %}>
+
+                <label for="barras_width">linea</label>
+                <input type="text" name="barras_width" id="barras_width" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[4] }}"{% endif %}>
+
+                <select name="barras_agupar_por">
+                    <option value="individual" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'individual' %}selected{% endif %}>individual</option>
+                    <option value="sumatoria" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'sumatoria' %}selected{% endif %}>sumatoria</option>
+                    <option value="medias" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'medias' %}selected{% endif %}>medias</option>
+                    <option value="mediana" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "mediana" %}selected{% endif %}>mediana</option>
+                    <option value="moda" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "moda" %}selected{% endif %}>moda</option>
+                    <option value="formula" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "formula" %}selected{% endif %}>formula</option>
+                </select>
+                
+                <div id="entrada_para_formula_barras">
+                    <label for="entrada_para_formula_barras"></label>
+                    <input type="text" name="entrada_para_formula_barras_entrada">
+                </div>
+                
+            </div>
+
+            <!-- Opciones para Gráfico de Dispersión -->
+            <div id="opciones_dispersion" style="display: none;" class="colores">
+                <label for="titulo_dispersion">Título:</label>
+                <input type="text" name="titulo_dispersion" id="titulo_dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %} value="{{ opciones_ads[0] }}"{% endif %}>
+                
+                <label for="trazos_dispersion">Trazos:</label>
+                <input type="text" name="trazos_dispersion" id="trazos_dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %} value="{{ opciones_ads[1] }}"{% endif %}>
+                
+                
+                <select name="arg_trazos">
+                    <option value="False" id="falso_k_d" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[2] == 'False' %}selected{% endif %}>False</option>
+                    <option value="True" id="verdadero_k_d" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[2] == 'True' %}selected{% endif %}>True</option>
+                </select>
+                
+                <select name="mean_color_dispersion">
+                    <option value="pink" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'pink' %}selected{% endif %}>pink</option>
+                    <option value="red" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'red' %}selected{% endif %}>red</option>
+                    <option value="bone" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'bone' %}selected{% endif %}>bone</option>
+                    <option value="magma" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'magma' %}selected{% endif %}>magma</option>
+                </select>
+
+                <div id="kwargs_dispersion" style="display: none;">
+                    <label for="kwargs_dispersion">kwargs</label>
+                    <input type="text" name="kwargs_dispersion">
+                    
+                </div>
+        
+                
+            </div>
+
+            
+            <!-- Opciones para Gráfico de Pastel -->
+            <div id="opciones_pastel" style="display: none;" class="opciones_ads colores" >
+                <!-- Campos de entrada para opciones de gráfica de pastel -->
+                <div>
+                    <label>colores</label>
+                    <select name="pastel_colores_por" >
+                        <option value="--">--</option>
+                        <option value="lista" {% if tipo_grafica_seleccionada == 'pastel' and func(0)(opciones[0], types(1)) %}selected{% endif %}>lista</option>
+                        <option value="rango" {% if tipo_grafica_seleccionada == 'pastel' and func(0)(opciones[0], types(0)) %}selected{% endif %}>rango</option>
+                    </select>
+                </div>
+
+
+
+                <div name="pastel_colores_por_rango" id ="pastel_colores_por_rango" style="display: none;"> 
+                <select name="selector_colores_pastel">
+                    <option value="pink" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'pink' %}selected{% endif %}>rosa</option>
+                    <option value="Blues" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'Blues' %}selected{% endif %}>azul</option>
+                    <option value="Purples" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'Purples' %}selected{% endif %}>morado</option>
+                    <option value="bone" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'bone' %}selected{% endif %}>hueso</option>
+                    <option value="Oranges" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'Oranges' %}selected{% endif %}>morado</option>
+                    <option value="Reds" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'Reds' %}selected{% endif %}> rojo </option>
+                    <option value="inferno" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'inferno' %}selected{% endif %}>infierno</option>
+                    <option value="Greens" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'Greens' %}selected{% endif %}>verde</option>
+                    <option value="Greys" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'Greys' %}selected{% endif %}>gris</option>
+                    <option value="PuRd" {% if tipo_grafica_seleccionada == 'pastel' and opciones[0] == 'PuRd' %}selected{% endif %}>Pu-R</option>
+                </select>
+                </div>
+
+                <div id="entrada_colores_pastel" style="display: none;">
+                    <label>lista de colores</label>
+                    <input type="text" id="entrada_colores_pastel_input" {% if tipo_grafica_seleccionada == 'pastel' and func(0)(opciones[0], types(1)) %} value="{{ opciones_ads }}" {% endif %}>
+                </div>
+                
+
+                <div>
+                    <label for="pastel_radio">radio</label>
+                    <input type="text" name="pastel_radio" id="pastel_radio" {% if tipo_grafica_seleccionada == 'pastel' %} value="{{ opciones_ads[1] }}" {% endif %}>
+                </div>
+
+                <div>
+                    <label for=centrado_pastel>centrado de la grafica</label>
+                    <input type="text" id="centrado_pastel" name="centrado_pastel" {% if ygen is false %} value="(4,4)" {% elif tipo_grafica_seleccionado == 'pastel' and ygen is true %} value="{{ opciones_ads[2] }}" {% endif %}>
+                </div>
+
+
+                <div>
+                    <label for="pastel_wedgeprops">wedgeprops</label>
+                    <input type="text" name="pastel_wedgeprops"  id="pastel_wedgeprops" value='{"linewidth": 1, "edgecolor": "white"}'>
+                </div>
+
+                <div>
+                    <label for="pastel_frame">frame</label>
+                    <select name="pastel_frame">
+                        <option value="True" {% if tipo_grafica_seleccionada == "pastel" and opciones_ads[4] == "True" %}selected{% endif %}>True</option>
+                        <option value="False" {% if tipo_grafica_seleccionada == "pastel" and opciones_ads[4] == "False" %}selected{% endif %}>False</option>
+                    </select>
+                </div>
+                
+                
+                <div>
+                    <select name="pastel_modo_de_agrupacion" >
+                        <option value="individual">individual</option>
+                        <option value="sumatoria">sumatoria</option>
+                        <option value="medias">medias</option>
+                        <option value="mediana">mediana</option>
+                        <option value="moda">moda</option>
+                        <option value="formula">formula</option>
+                        <option value="porcentaje">porcentaje</option>
+
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div>
+                <input type="submit" value="Generar Gráfica">
+            </div>
+
+            <!--opciones adicionales-->              
+
+                <div class="container colores">
+
+                    <div class="image-container">
+                        <img src="{{ url_for('static', filename='show/' ~ fig ~ '.png') }}" alt="Imagen 1">
+                
+                    </div>
+                    <!-- settings de grafica de pastel -->
+                    <div class="config-container">       
+                        <div>configuracion de grafica de pastel</div>
+                        <div id="configuracion_pastel" {%if tipo_grafica_seleccionada == "pastel" %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+                            
+                            <!-- seccion toda conectada -->
+                            <div>
+                                <label>agregar autopack</label>
+                                <select name="selector_autopack_pastel">
+                                    <option value="False" {%if tipo_grafica_seleccionada == "pastel"  and settings_ads[0] == "False" %}selected{% endif %}>desactivado</option>
+                                    <option value="True" {%if tipo_grafica_seleccionada == "pastel"  and settings_ads[0] == "True" %}selected{% endif %}>activado</option>
+                                </select>
+                            </div>
+
+                            <!-- si es true entonces se muestra el selector 
+                                se muestra el selector para activar o desactivar la 
+                                visualización del total-->
+
+                            <div id="total_pct_pastel" name="total_pct_pastel" style="display: none;">
+                                <label>mostrar el total</label>
+                                <select name="total_pct_pastel_activar" >
+                                    <option value="False" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[1] == "False" %}selected{% endif %}>desactivado</option>
+                                    <option value="True" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[1] == "True" %}selected{% endif %}>activado</option>
+                                </select>
+                            </div>
+
+                            <!--si se activa la visualización del total entonces se muestra la
+                                entrada para indicar las unidades en las que está-->
+
+                            <div id="unidades_de_totales_pastel" name="unidades_de_totales_pastel" style="display: none;">
+                                <label for="entrada_unidades_de_totales_pastel">unidad de medida</label>
+                                <input type="text" name="entrada_unidades_de_totales_pastel" id="entrada_unidades_de_totales_pastel" {% if tipo_grafica_seleccionada == "pastel" %}value="{{ settings_ads[2] }}"{% endif %}>
+                            </div>
+
+                            <!--y se activa la entrada para la distancia del pct-->
+                            <div name="pct_distance_pastel" id="pct_distance_pastel" style="display: none;">
+                                <label for="inputpct_distance_pastel">distancia pct</label>
+                                <input type="text" name="inputpct_distance_pastel" id="inputpct_distance_pastel" {% if tipo_grafica_seleccionada == "pastel" %}value="{{ settings_ads[3] }}"{% endif %}>
+                            </div>
+                            <!-- /seccion toda conectada -->
+
+                            <div>
+                                <label for="hatch_pastel">hatch</label>
+                                <input type="text" name="hatch_pastel" id="hatch_pastel" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[4] != "None" %}value="{{ settings_ads[4] }}"{% endif %}>
+                            </div>
+
+                            <div>
+                                <label for="label_distance_pastel">distancia de las etiquetas</label>
+                                <input name="label_distance_pastel" id="label_distance_pastel" {% if tipo_grafica_seleccionada == "pastel" %}value="{{ settings_ads[5] }}"{% endif %}>
+                            </div>
+
+                            <div>
+                                <label for="pastel_explode">explodear rebanada</label>
+                                <input type="text" name="pastel_explode" id="pastel_explode" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[6] != "None" %}value="{{ settings_ads[6] }}"{% endif %}>
+                            </div>
+
+                            <div>
+                                <label for="cuanto_explode_pastel">nivel de explode</label>
+                                <input type="text" name="cuanto_explode_pastel" id="cuanto_explode_pastel" {% if tipo_grafica_seleccionada == "pastel" %}value="{{ settings_ads[7] }}"{% endif %}>
+                            </div>
+
+                            <div>
+                                <label for="start_angle_pastel">angulo de inicio</label>
+                                <input type="text" name="start_angle_pastel" id="start_angle_pastel" {% if tipo_grafica_seleccionada == "pastel" %}value="{{ settings_ads[8] }}"{% endif %}>
+                            </div>
+                            
+
+
+                            <div>
+                                <label for="text_porps_pastel">texto prop</label>
+                                <input type="text" name="text_porps_pastel" id="text_porps_pastel" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[10] != "None" %}value="{{ settings_ads[10] }}" {% endif %}>
+                            </div>
+
+
+                            <!--area conectada-->
+                            <div>
+                                <label for="legend_pastel">leyenda</label>
+                                <select name="legend_pastel">
+                                    <option value="False" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[11] == "False" %}selected{% endif %}>--</option>
+                                    <option value="True" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[11] == "True" %}selected{% endif %}>agregar leyenda</option>
+                                </select>
+                            </div>
+
+
+                            <!-- si legend_pastel es verdadero se mostrarán los settings para la leyenda en el pastel-->
+                            <div name="opciones_leyenda_pastel" id="opciones_leyenda_pastel" style="display: none;">
+
+                                <div>
+                                    <label for="legend_tit_pastel">titulo</label>
+                                    <input type="text" name="legend_tit_pastel" id="legend_tit_pastel" {% if tipo_grafica_seleccionada == "pastel" %}value="{{ settings_ads[12] }}"{% endif %}>
+                                </div>
+                                
+                                <div>
+                                    <label for="leyend_loc_pastel">loc</label>
+                                    <select name="leyend_loc_pastel">
+                                        <option value="center" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[13] == "center" %}selected{% endif %}>centro</option>
+                                        <option value="center left" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[13] == "center left" %}selected{% endif %}>centro a la izquierda</option>
+                                        <option value="center right" {% if tipo_grafica_seleccionada == "pastel" and settings_ads[13] == "center right" %}selected{% endif %}>centro a la derecha</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="legend_loc_y_pastel">eje Y</label>
+                                    <input type="range" min="-1" max="1" {% if tipo_grafica_seleccionada == "pastel" and ygen is true%}value="{{ settings_ads[14] }}"{% else %}value="0"{% endif %}  step=".1" name="legend_loc_y_pastel" id="legend_loc_y_pastel">
+                                    <div id="value_legend_loc_y_pastel">0</div>
+                                </div>
+                                
+                                <div>
+                                    <label for="legend_loc_x_pastel">eje x</label>
+                                    <input type="range" min="-1" max="1" {% if tipo_grafica_seleccionada == "pastel" and ygen is true%}value="{{ settings_ads[14] }}"{% else %}value="0"{% endif %} step=".1" name="legend_loc_x_pastel" id="legend_loc_x_pastel">
+                                    <div id="value_legend_loc_x_pastel">0</div>
+                                </div>
+                                <!--/area conectada-->
+
+                                
+                            </div>
+
+                            <!--area conectada de figura extra-->
+                            <label for="figura_extra_pastel">figura extra</label>
+                                <select name="figura_extra_pastel">
+                                    <option value="--">--</option>
+                                    <option value="barra">barra</option>
+                                </select>
+
+                                <label for="filter_def_pastel">filter svg</label>
+                                <input type="text" id="filter_def_pastel" name="filter_def_pastel">
+
+                            <!--al seleccionar alguna de las figuras extra, se mostraran los settings especiales para la figura extra-->
+                            <div name="setting_barra_pastel" id="setting_barra_pastel" style="display: none;">
+                                <!--subconeccion-->
+                                <select name="pastel_barra_mism_arch_nuev">
+                                    <option value="mismo">mismo archivo</option>
+                                    <option value="nuevo">nuevo archivo</option>
+                                </select>
+                                <div name="entrada_arch_barra_pastel" id="entrada_arch_barra_pastel" style="display: none;">
+                                    <input type="file" accept=".csv .xlsx" name="entrada_arch_barra_pastel_input" id="entrada_arch_barra_pastel_input">
+                                </div>
+                                <input type="text" name="barra_pastel_oculto" id="barra_pastel_oculto" style="display: none;">
+                                <!--/subconeccion-->
+
+                                <label for="f_c_barra_pastel_y">columna o fila </label>
+                                <input type="text" name="f_c_barra_pastel_y" id="b_c_barra_pastel_y">
+                                
+                                <label for="f_c_barra_pastel_y">columna o fila </label>
+                                <input type="text" name="f_c_barra_pastel_x" id="b_c_barra_pastel_x">
+
+                                <label for="bottom_barra_pastel">bottom</label>
+                                <input type="text" name="bottom_barra_pastel" id="bottom_barra_pastel">
+
+                                <label for="barras_pastel_width">width</label>
+                                <input type="text" name="barras_pastel_width" id="barras_pastel_width">
+
+                                <label for="colores_barra_pastel">color</label>
+                                <select name="colores_barra_pastel"> 
+                                    <option value="C0">C0</option>
+                                </select>
+
+                                <label for="titulo_barra_pastel">titulo</label>
+                                <input type="text" name="titulo_barra_pastel" name="titulo_barra_pastel">
+
+                            </div>
+            
+
+                        </div>
+                    </div>
+
+                </div>
+
+            
+
+            <!-- Campo oculto para almacenar las opciones de Gráfico de Barras -->
+                <input type="hidden" name="opciones_barras" id="opciones_barras">
+
+                <!-- Campo oculto para almacenar las opciones de Gráfico de Dispersión -->
+                <input type="hidden" name="opciones_dispersion" id="opciones_dispersion">
+
+                <!-- Campo oculto para almacenar las opciones de Gráfico de Pastel -->
+                <input type="hidden" name="opciones_pastel" id="opciones_pastel">
+
+            
+            
+        </div>    
+    </form>
+
+    <footer>
+        <div id="footer">
+            <div class="footer-section redes">
+                <h2>Redes</h2>
+                <ul>
+                    <li><a href="https://www.facebook.com">Facebook</a></li>
+                    <li><a href="https://twitter.com">Twitter</a></li>
+                    <li><a href="https://www.youtube.com">YouTube</a></li>
+                    <li><a href="https://github.com">GitHub</a></li>
+                </ul>
+            </div>
+        
+            <div class="footer-section documentacion">
+                <h2>Documentación</h2>
+                <ul>
+                    <li><a href="docs/manual.pdf">Manual de usuario</a></li>
+                    <li><a href="docs/api.pdf">Documentación de la API</a></li>
+                </ul>
+            </div>
+        
+            <div class="footer-section trabajo">
+                <h2>Oportunidades de trabajo</h2>
+                <p>¡Únete a nuestro equipo! Estamos buscando personas apasionadas por la tecnología.</p>
+                <a href="trabajo.html">Ver oportunidades</a>
+            </div>
+        </div>
+        
+    </footer>
+    
+</body>
+
+<script>// Obtén el elemento select del tipo de gráfico y todos los divs de opciones
+    const tipoGraficaSelect = document.querySelector("select[name='tipo_grafica']");
+    const opcionesBarras = document.getElementById("opciones_barras");
+    const opcionesDispersion = document.getElementById("opciones_dispersion");
+    const opcionesPastel = document.getElementById("opciones_pastel");
+
+    // Agrega un evento para escuchar cambios en la selección
+    tipoGraficaSelect.addEventListener("change", function () {
+        // Oculta todas las opciones adicionales primero 
+        opcionesBarras.style.display = "none";
+        opcionesDispersion.style.display = "none";
+        opcionesPastel.style.display = "none";
+
+        // Obtén el valor seleccionado
+        const tipoGraficaSeleccionado = tipoGraficaSelect.value;
+
+        // Muestra las opciones adicionales según el tipo de gráfico seleccionado
+        if (tipoGraficaSeleccionado === "barras") {
+            opcionesBarras.style.display = "block";
+        } else if (tipoGraficaSeleccionado === "dispersion") {
+            opcionesDispersion.style.display = "block";
+        } else if (tipoGraficaSeleccionado === "pastel") {
+            opcionesPastel.style.display = "block";
+        }
+
+        const opcionesSeleccionadas = obtenerOpcionesSeleccionadas();  // Implementa esta función
+
+        // Establecer las opciones en los campos ocultos
+        if (tipoGraficaSeleccionado === "barras") {
+            document.getElementById("opciones_barras").value = opcionesSeleccionadas;
+        } else if (tipoGraficaSeleccionado === "dispersion") {
+            document.getElementById("opciones_dispersion").value = opcionesSeleccionadas;
+        } else if (tipoGraficaSeleccionado === "pastel") {
+            document.getElementById("opciones_pastel").value = opcionesSeleccionadas;
+        }
+
+    });
+
+    const DispersionKwargsActivadosONo = document.querySelector("select[name='arg_trazos']");
+    const verdaderoKwActDisp = document.getElementById("kwargs_dispersion");
+    //cambios 
+    DispersionKwargsActivadosONo.addEventListener("change", function(){
+        verdaderoKwActDisp.style.display = "none";
+
+        //opcion seleccionada
+        const kwDispSeleccionado = DispersionKwargsActivadosONo.value;
+
+        if (kwDispSeleccionado === "False") {
+            verdaderoKwActDisp.style.display="none";
+        }else if (kwDispSeleccionado === "True") {
+            verdaderoKwActDisp.style.display="block";
+        }
+    });
+
+    // elementos de modo de color del grafico de barras
+    
+    const SelectModoDeColorBarras = document.querySelector("select[name='barras_colores_por']");
+    const EntradaDeListaDeColoresBarras = document.getElementById("barras_color_list");
+    const SelectorDeRangoDeColoresBarras = document.getElementById("barras_color_cmap");
+
+    SelectModoDeColorBarras.addEventListener("change", function() {
+        EntradaDeListaDeColoresBarras.style.display = "none";
+        SelectorDeRangoDeColoresBarras.style.display = "none";
+
+        const ModoDeColoresDeBarrasSeleccionado = SelectModoDeColorBarras.value;
+        
+        if (ModoDeColoresDeBarrasSeleccionado === "lista"){
+            EntradaDeListaDeColoresBarras.style.display = "block";
+        } else if (ModoDeColoresDeBarrasSeleccionado === "rango"){
+            SelectorDeRangoDeColoresBarras.style.display = "block";
+        }
+    }); 
+
+    ///
+    // tipo de agrupacion en las graficas de barra
+    
+    const SelectTipoDeAgrupacionBarras = document.querySelector("select[name='barras_agupar_por']");
+    const EntradaParaFormulasBarra = document.getElementById("entrada_para_formula_barras");
+
+    SelectTipoDeAgrupacionBarras.addEventListener("change", function() {
+        EntradaParaFormulasBarra.style.display = "none";
+
+        const TipoDeAgrupacionElegidoBarras = SelectTipoDeAgrupacionBarras.value;
+
+        if (TipoDeAgrupacionElegidoBarras === "formula"){
+            EntradaParaFormulasBarra.style.display = "block";
+        } else EntradaParaFormulasBarra.style.display = "none";
+    });
+
+    ///selector de modo de coloreado en la grafica de pastel
+    const selectColorPorPastel = document.querySelector("select[name='pastel_colores_por']");
+    const pastelColoresPorRango = document.getElementById("pastel_colores_por_rango");
+    const pastelColoresPorLista = document.getElementById("entrada_colores_pastel");
+
+    selectColorPorPastel.addEventListener("change", function() {
+        pastelColoresPorRango.style.display = "none";
+        pastelColoresPorLista.style.display = "none";
+
+        const pastelmodoSeleccionado = selectColorPorPastel.value;
+
+        if (pastelmodoSeleccionado === "rango") {
+            pastelColoresPorRango.style.display = "block";
+        } else if (pastelmodoSeleccionado === "lista") {
+            pastelColoresPorLista.style.display = "block";
+        } 
+    });
+
+    const formularioCompleto = document.getElementById("formulario");
+    const settingsPastel = document.getElementById("configuracion_pastel")
+
+    formularioCompleto.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+    settingsPastel.style.display = "none";
+    
+    const grafSeleccionado = tipoGraficaSelect.value;
+    if (grafSeleccionado === "pastel"){
+        settingsPastel.style.display = "block"
+    }
+    
+
+});
+
+    const selectorAutopacPastel = document.querySelector("select[name='selector_autopack_pastel']");
+    const selectorMostrarTotalPastel = document.getElementById("total_pct_pastel");
+
+    selectorAutopacPastel.addEventListener("change", function() {
+        selectColorPorPastel.style.display = "none";
+
+        const autopasPastelSeleccionado = selectorAutopacPastel.value;
+
+        if (autopasPastelSeleccionado === "True") {
+            selectorMostrarTotalPastel.style.display = "block";
+        };
+    });
+
+    const totalPastelesActivarSelector = document.querySelector("select[name='total_pct_pastel_activar']")
+    const unidadesDeTotalesPastel = document.getElementById("unidades_de_totales_pastel")
+
+    totalPastelesActivarSelector.addEventListener("change", function(){
+        unidadesDeTotalesPastel.style.display="none";
+
+        const TotalPastelesSeleccionado = totalPastelesActivarSelector.value;
+
+        if (TotalPastelesSeleccionado === "True") {
+            unidadesDeTotalesPastel.style.display = "block";
+        };
+
+    });
+
+
+    const legendPastel = document.querySelector("select[name='legend_pastel']");
+    const settingsLeyendaPastel = document.getElementById("opciones_leyenda_pastel");
+
+    legendPastel.addEventListener("change", function(){
+        settingsLeyendaPastel.style.display = "none";
+
+        legendPastelActiv = legendPastel.value;
+
+        if (legendPastelActiv === "True"){
+            settingsLeyendaPastel.style.display = "block";
+        };
+    });
+
+
+    tipoGraficaSelect.dispatchEvent(new Event("change"));
+    
+    const barra_pastel_y = document.getElementById("legend_loc_y_pastel");
+    const valor_barra_pastel_y = document.getElementById("value_legend_loc_y_pastel");
+
+    barra_pastel_y.addEventListener("input", function() {
+    valor_barra_pastel_y.textContent = barra_pastel_y.value;
+    });
+
+    const barra_pastel_x = document.getElementById("legend_loc_x_pastel");
+    const valor_barra_pastel_x = document.getElementById("value_legend_loc_x_pastel");
+
+    barra_pastel_x.addEventListener("input", function() {
+        valor_barra_pastel_x.textContent = barra_pastel_x.value;
+    });
+
+
+
+
+</script> 
+</html>
