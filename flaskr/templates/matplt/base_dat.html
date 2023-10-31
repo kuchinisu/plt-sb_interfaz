@@ -41,18 +41,21 @@
 
         </div>
             <!-- Opciones para Gráfico de Barras -->
-            <div id="opciones_barras" style="display: none;" class="colores">
+            <div id="opciones_barras" style="display: none;" class="opciones_ads colores">
                 <!-- Campos de entrada para opciones de gráfica de barras -->
-                
-                <label for="colores">colores</label>
-                <select name="barras_colores_por">
-                    <option value="--" >--</option>
-                    <option value="rango" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(0))  %}selected{% endif %}>
-                        rango
-                    </option>
-                    <option value="lista" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(1))  %}selected{% endif %}> lista </option>
-                </select>
-                
+
+                <div>
+                    <label for="colores">colores</label>
+                    <select name="barras_colores_por">
+                        <option value="--" >--</option>
+                        <option value="rango" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(0))  %}selected{% endif %}>
+                            rango
+                        </option>
+                        <option value="lista" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(1))  %}selected{% endif %}> lista </option>
+                    </select>
+                </div>
+
+
                 <div id="barras_color_cmap" style="display: none;">
                     <select name="barras_select_cmap">
                         <option value="pink" {% if tipo_grafica_seleccionada == 'barras' and opciones[0] == 'pink' %}selected{% endif %}>rosa</option>
@@ -62,31 +65,42 @@
                         <option value="inferno" {% if tipo_grafica_seleccionada == 'barras' and opciones[0] == 'inferno' %}selected{% endif %}>infierno</option>
                     </select>
                 </div>
+
                 <div id="barras_color_list" style="display: none;">
                     <label for="_barras_mapa_de_color" >lista</label>
                     <input type="text" name="_barras_mapa_de_color_inp" {% if tipo_grafica_seleccionada == 'barras' and func(0)(opciones[0], types(1)) %}value="{{ opciones_ads[0] }}"{% endif %}>
                 </div>
 
-                <label for="barras_y_label">etiqueta en y</label>
-                <input type="text" name="barras_y_label" id="barras_y_label" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[1] }}"{% endif %}>
-                <label for="barras_x_label">etiqueta en x</label>
-                <input type="text" name="barras_x_label" id="barras_x_label" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[2] }}"{% endif %}>
-                    
-                <label for="barras_figsize">dimensiones</label>
-                <input type="text" name="barras_figsize" id="barras_figsize" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[3] }}"{% endif %}>
+                <div>
+                    <label for="barras_y_label">etiqueta en y</label>
+                    <input type="text" name="barras_y_label" id="barras_y_label" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[1] }}"{% endif %}>
+                </div>
+                <div>
+                    <label for="barras_x_label">etiqueta en x</label>
+                    <input type="text" name="barras_x_label" id="barras_x_label" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[2] }}"{% endif %}>
+                </div>
 
-                <label for="barras_width">linea</label>
-                <input type="text" name="barras_width" id="barras_width" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[4] }}"{% endif %}>
+                <div>
+                    <label for="barras_figsize">dimensiones</label>
+                    <input type="text" name="barras_figsize" id="barras_figsize" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[3] }}"{% endif %}>
+                </div>
 
-                <select name="barras_agupar_por">
-                    <option value="individual" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'individual' %}selected{% endif %}>individual</option>
-                    <option value="sumatoria" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'sumatoria' %}selected{% endif %}>sumatoria</option>
-                    <option value="medias" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'medias' %}selected{% endif %}>medias</option>
-                    <option value="mediana" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "mediana" %}selected{% endif %}>mediana</option>
-                    <option value="moda" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "moda" %}selected{% endif %}>moda</option>
-                    <option value="formula" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "formula" %}selected{% endif %}>formula</option>
-                </select>
-                
+                <div>
+                    <label for="barras_width">linea</label>
+                    <input type="text" name="barras_width" id="barras_width" {% if tipo_grafica_seleccionada == 'barras' %}value="{{ opciones_ads[4] }}"{% endif %}>
+                </div>
+
+                <div>
+                    <select name="barras_agupar_por">
+                        <option value="individual" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'individual' %}selected{% endif %}>individual</option>
+                        <option value="sumatoria" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'sumatoria' %}selected{% endif %}>sumatoria</option>
+                        <option value="medias" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == 'medias' %}selected{% endif %}>medias</option>
+                        <option value="mediana" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "mediana" %}selected{% endif %}>mediana</option>
+                        <option value="moda" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "moda" %}selected{% endif %}>moda</option>
+                        <option value="formula" {% if tipo_grafica_seleccionada == 'barras' and opciones[5] == "formula" %}selected{% endif %}>formula</option>
+                    </select>
+                </div>
+
                 <div id="entrada_para_formula_barras">
                     <label for="entrada_para_formula_barras"></label>
                     <input type="text" name="entrada_para_formula_barras_entrada">
@@ -95,32 +109,76 @@
             </div>
 
             <!-- Opciones para Gráfico de Dispersión -->
-            <div id="opciones_dispersion" style="display: none;" class="colores">
-                <label for="titulo_dispersion">Título:</label>
-                <input type="text" name="titulo_dispersion" id="titulo_dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %} value="{{ opciones_ads[0] }}"{% endif %}>
-                
-                <label for="trazos_dispersion">Trazos:</label>
-                <input type="text" name="trazos_dispersion" id="trazos_dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %} value="{{ opciones_ads[1] }}"{% endif %}>
-                
-                
-                <select name="arg_trazos">
-                    <option value="False" id="falso_k_d" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[2] == 'False' %}selected{% endif %}>False</option>
-                    <option value="True" id="verdadero_k_d" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[2] == 'True' %}selected{% endif %}>True</option>
-                </select>
-                
-                <select name="mean_color_dispersion">
-                    <option value="pink" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'pink' %}selected{% endif %}>pink</option>
-                    <option value="red" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'red' %}selected{% endif %}>red</option>
-                    <option value="bone" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'bone' %}selected{% endif %}>bone</option>
-                    <option value="magma" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'magma' %}selected{% endif %}>magma</option>
-                </select>
-
-                <div id="kwargs_dispersion" style="display: none;">
-                    <label for="kwargs_dispersion">kwargs</label>
-                    <input type="text" name="kwargs_dispersion">
-                    
+            <div id="opciones_dispersion" style="display: none;" class="opciones_ads colores">
+                <div>
+                    <label for="titulo_dispersion">Título:</label>
+                    <input type="text" name="titulo_dispersion" id="titulo_dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %} value="{{ opciones_ads[0] }}"{% endif %}>
                 </div>
-        
+
+
+                <div>
+                    <label for="trazos_dispersion">Trazos:</label>
+                    <input type="text" name="trazos_dispersion" id="trazos_dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %} value="{{ opciones_ads[1] }}"{% endif %}>
+                </div>
+                
+                <div>
+                    <select name="arg_trazos">
+                        <option value="False" id="falso_k_d" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[2] == 'False' %}selected{% endif %}>False</option>
+                        <option value="True" id="verdadero_k_d" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[2] == 'True' %}selected{% endif %}>True</option>
+                    </select>
+                </div>
+
+                <div name="div_tipo_mean_color_disp" id="div_tipo_mean_color_disp">
+                    <label for="tipo_mean_color_dispersion">mean color por</label>
+                    <select name="tipo_mean_color_dispersion">
+                        <option value="--">--</option>
+                        <option value="seleccionar">seleccionar</option>
+                        <option value="random">random</option>
+                    </select>
+                </div>
+
+                <div id="dev_mean_color_dispersion" name="dev_mean_color_dispersion" style="display: none;">
+                    <label for="mean_color_dispersion">color del mean</label>
+                    <select name="mean_color_dispersion">
+                        <option value="pink" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'pink' %}selected{% endif %}>pink</option>
+                        <option value="red" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'red' %}selected{% endif %}>red</option>
+                        <option value="bone" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'bone' %}selected{% endif %}>bone</option>
+                        <option value="magma" {% if tipo_grafica_seleccionada == 'dispersion' and opciones[3] == 'magma' %}selected{% endif %}>magma</option>
+                    </select>
+                </div>
+
+                <div>
+                    <div id="kwargs_dispersion" style="display: none;">
+                        <label for="kwargs_dispersion">kwargs</label>
+                        <input type="text" name="kwargs_dispersion">
+                        
+                    </div>
+                </div>
+
+                <div name="size_puntos_disp" id="size_puntos_disp">
+                    <label for="select_size_puntos_disp">tamaño de puntos</label>
+                    <select name="select_size_puntos_disp">
+                        <option value="0.5">0.5</option>
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                        <option value="area">area</option>
+                    </select>
+
+                <div name="colores_pts_dispr">
+                    <label for="select_colores_pts_dispr">colores</label>
+                    <select name="select_colores_pts_dispr">
+                        <option value="c">c</option>
+                        <option value="random">random</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="input_alfa_disp">alfa</label>
+                    <input type="text" name="input_alfa_disp">
+                </div>
+
+                </div>
                 
             </div>
 
@@ -213,9 +271,12 @@
                         <img src="{{ url_for('static', filename='show/' ~ fig ~ '.png') }}" alt="Imagen 1">
                 
                     </div>
-                    <!-- settings de grafica de pastel -->
+                    <!-- settings -->
                     <div class="config-container">       
-                        <div>configuracion de grafica de pastel</div>
+                        <div>configuracion</div>
+
+                        <!--settings para la grafica de pastel-->
+
                         <div id="configuracion_pastel" {%if tipo_grafica_seleccionada == "pastel" %}style="display: block;"{% else %}style="display: none;"{% endif %}>
                             
                             <!-- seccion toda conectada -->
@@ -377,6 +438,22 @@
             
 
                         </div>
+
+                        <!--settings para la grafica de dispersion-->
+                        <div id="configuracion_dispersion" {% if tipo_grafica_seleccionada == "dispersion" %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+                            <div id="grid_para_disp" name="grid_para_disp">
+                                <label for="grid_para_disp_select"></label>
+
+                                <select name="grid_para_disp_select" >
+                                    <option value="False">desactivado</option>
+                                    <option value="True">activado</option>
+                                </select>
+                            </div>
+
+
+                            <!--settings para la grafica de barras-->
+                        </div>
+
                     </div>
 
                 </div>
@@ -405,7 +482,7 @@
                     <li><a href="https://www.facebook.com">Facebook</a></li>
                     <li><a href="https://twitter.com">Twitter</a></li>
                     <li><a href="https://www.youtube.com">YouTube</a></li>
-                    <li><a href="https://github.com">GitHub</a></li>
+                    <li><a href="https://github.com/kuchinisu/plt-sb_interfaz">GitHub</a></li>
                 </ul>
             </div>
         
@@ -609,6 +686,21 @@
         valor_barra_pastel_x.textContent = barra_pastel_x.value;
     });
 
+
+    //cosas para grafica de dispercion
+    //modo de coloreado de media
+    const tipoColoreadoMedia = document.querySelector("select[name='tipo_mean_color_dispersion']")
+    const selectorColorMedia = document.getElementById("dev_mean_color_dispersion")
+
+    tipoColoreadoMedia.addEventListener("change", function(){
+        selectorColorMedia.style.display = "none";
+
+        const modoColorMediaSeleccionado = tipoColoreadoMedia.value;
+
+        if (modoColorMediaSeleccionado=="seleccionar"){
+            selectorColorMedia.style.display = "block";
+        };
+    });
 
 
 

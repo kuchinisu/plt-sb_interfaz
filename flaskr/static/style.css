@@ -66,12 +66,28 @@ input[type=submit] { align-self: start; min-width: 10em; }
 }
 
 #conf_inicial input[type="text"], #conf_inicial select {
-    width: 10%; /* Hace que los campos de texto y los selects ocupen todo el ancho del contenedor */
-    margin-bottom: 10px; /* Agrega un margen inferior de 10px a los campos de entrada y selects */
+    width: 10%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #dae9f3;
 }
+#conf_inicial input[type="file"]{
+    padding: 5px;
+  width: 20%;
+  border-radius: 6px;
+  background-color: #111016;
+  color: #cac8c3;
+    
+}
+
 
 #conf_inicial select {
     padding: 5px; /* Agrega un relleno a los selects */
+    width: 20%;
+    border-radius: 6px;
+    background-color: #111016;
+    color: #cac8c3;
 }
 
 #conf_inicial select option {
@@ -182,11 +198,21 @@ input[type=submit] { align-self: start; min-width: 10em; }
 .opciones_ads input {
     width: 10%;
     margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #dae9f3;
    
 }
 .opciones_ads select {
     margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #a6bccb;
+
+    padding: 6px; 
+    border: 1px solid #02040f; 
 }
+
 
 
 

@@ -113,19 +113,45 @@ def gener():
 
 def error_test(arg):
     raise ValueError(f"{arg}")
-
+################# dispercion ######################
 def obtener_opciones_dispercion():
     
 
     titulo = request.form['titulo_dispersion']
     trazos = request.form['trazos_dispersion']
     arg_trazos = request.form['arg_trazos']
-    mean_color = request.form['mean_color_dispersion']
+
+    select_mean_color=request.form.get('tipo_mean_color_dispersion')
+    if select_mean_color == 'seleccionar':
+        mean_color = request.form['mean_color_dispersion']
+    elif select_mean_color=='random':
+        mean_color='random'
+    else:
+        mean_color='random'
+
+    tma_pts=request.form.get('select_size_puntos_disp')
+
+    colores_pts=request.form.get('select_colores_pts_dispr')
+
+    alfa=request.form['input_alfa_disp']
+    if not alfa:
+        alfa=1
+
+    settings=obtener_settings_dipsersion()
+    opciones = [titulo, trazos, arg_trazos, mean_color,tma_pts,colores_pts,alfa]
+    return [opciones, settings]
+
+def obtener_settings_dipsersion():
+    activar_grid=request.form.get('grid_para_disp_select')
     
+    if not activar_grid:
+        activar_grid="False"
+    
+    settings=[activar_grid]
+    return settings
 
-    opciones = [titulo, trazos, arg_trazos, mean_color]
-    return [opciones]
 
+#################end dispercion ######################
 def obtener_opciones_barras():
     tipo_de_coloreado = request.form.get('barras_colores_por')
     if tipo_de_coloreado == "lista":
@@ -149,9 +175,14 @@ def obtener_opciones_barras():
         agrupado = formula
     else:
         agrupado = agrupar_por
+    
+    
 
     args_list = [colores, y_label, x_label, figzise, width, agrupado]
-    return [args_list]
+    return [args_list, [None]]
+
+
+######################## pastel ##################
 
 def obtener_lista_de_pastel(array_contenido):
     color_por=request.form.get('pastel_colores_por')
@@ -306,6 +337,8 @@ def get_barra_pastel(array_contenido):
         
 
     return lista_args
+
+######################## end pastel ##################
 
 def obtener_lista_de_str(inp_lista):
     lista=[palabra.strip() for palabra in inp_lista.split()]

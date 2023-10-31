@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import ConnectionPatch
 import numpy as np
-
+import matplotlib.cbook as cbook
 
 from .matematicas import *
 from .funciones import *
@@ -25,7 +25,8 @@ def dict_functs(funct_name, x, y, ax, **kwargs):
 #titulo=None, trazos=None, arg_trazos=None, mean_color='red'
 def dispercion(x, y, ax, args_t, **kwargs):
     #try:
-        titulo, trazos, arg_trazos, mean_color = args_t[0]
+        titulo, trazos, arg_trazos, mean_color,size_pts, colores_pts, alfa = args_t[0]
+        ad_grid = args_t[1][0]
         
         if ax is None:
             fig, ax = plt.subplots()
@@ -33,13 +34,23 @@ def dispercion(x, y, ax, args_t, **kwargs):
         x, y= limpiar_arrays(
             x,y,[str,bool],[str,bool],"float","float",tipo_array_x="float64", tipo_array_y="float64"
             )
+        
+        if mean_color == 'random':
+            N = len(x)
+            mean_color = 'c'
+        if size_pts == 'area':
+            size_pts=(30 * np.random.rand(len(x)))**2
+        
+        if colores_pts=="random":
+            N=len(x)
+            colores_pts=np.random.rand(N)
 
         covalencia, coeficiente = cov_coef(x, y)
 
         x = np.array(x).astype(float)
         y = np.array(y).astype(float)
 
-        ax.scatter(x, y, s=0.5)
+        ax.scatter(x, y, s=size_pts,c=colores_pts, alpha=alfa)
         ax.axvline(c="grey", lw=1)
         ax.axhline(c="grey", lw=1)
 
@@ -58,11 +69,18 @@ def dispercion(x, y, ax, args_t, **kwargs):
         mean_x = np.mean(x)
         mean_y = np.mean(y)
 
-        ax.scatter(mean_x, mean_y, c=mean_color)
+        ax.scatter(mean_x, mean_y, c='red')
         if titulo:
             ax.set_title(titulo)
+        #grid
+        if ad_grid is not None:
+                ax.grid(ad_grid)
+        else:
+            raise TypeError(f"el valor de 'ad_grid' tiene que ser booleano y es {type(ad_grid)} y contiene {ad_grid}")
+        
+        
 
-        plt.savefig("nombre_del_archivo.png")
+
         return ax
     
     #except:
