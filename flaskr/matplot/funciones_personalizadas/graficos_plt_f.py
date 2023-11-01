@@ -115,6 +115,7 @@ def agrupado_dict(metodo):
 
 def barras(x, y, ax, vars_t):
     colores, y_label, x_label, figzise, width, agrupado = vars_t[0]
+    lienal, _ = vars_t[1]
 
     if ax is None:
         if figzise is None:
@@ -144,6 +145,10 @@ def barras(x, y, ax, vars_t):
            
         except: 
             raise ValueError(f"x: {type(x)}, x[0]: {type(x[2])} y: {type(y)} y[0]: {type(y[2])}")
+    
+    if lienal is not None:
+        if lienal: 
+            ax.plot(x,y)
     
     if y_label:
         ax.set_ylabel(y_label)
@@ -253,7 +258,7 @@ def pastel(x,y,ax, tot_list ):
         explode = None
         
 
-
+    
 
     wedges_ax1, texts_ax1, autotexts_ax1 = ax1.pie(x, explode=explode, labels=y, 
         colors=colors, autopct=lambda pct: pastel_pct(pct, x, total_pct, unidad_de_total, autopact_), pctdistance=pct_distance_, 

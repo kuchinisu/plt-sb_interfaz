@@ -152,6 +152,8 @@ def obtener_settings_dipsersion():
 
 
 #################end dispercion ######################
+
+################ barras ####################
 def obtener_opciones_barras():
     tipo_de_coloreado = request.form.get('barras_colores_por')
     if tipo_de_coloreado == "lista":
@@ -176,10 +178,20 @@ def obtener_opciones_barras():
     else:
         agrupado = agrupar_por
     
+    settings = obtener_settings_barras()
+    
     
 
     args_list = [colores, y_label, x_label, figzise, width, agrupado]
-    return [args_list, [None]]
+    return [args_list, settings]
+
+def obtener_settings_barras():
+    linea = request.form.get('select_agregar_linea_barras')
+    if not linea:
+        linea = "False"
+    settings=[linea, None]
+    return settings
+###########################/barras############
 
 
 ######################## pastel ##################
@@ -203,7 +215,7 @@ def obtener_lista_de_pastel(array_contenido):
     if request.form['centrado_pastel']:
         centrar = request.form['centrado_pastel']
     else:
-        centrar='(4,4)'
+        centrar='(0,2)'
 
     if request.form['pastel_wedgeprops']:
         wedgeprops = str_a_dicc(request.form['pastel_wedgeprops'])

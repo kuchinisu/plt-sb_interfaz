@@ -158,24 +158,24 @@
                 <div name="size_puntos_disp" id="size_puntos_disp">
                     <label for="select_size_puntos_disp">tamaño de puntos</label>
                     <select name="select_size_puntos_disp">
-                        <option value="0.5">0.5</option>
-                        <option value="1">1</option>
-                        <option value="1.5">1.5</option>
-                        <option value="2">2</option>
-                        <option value="area">area</option>
+                        <option value="0.5" {% if tipo_grafica_seleccionada == "dispersion" and opciones_ads[4] == "0.5"%}selected{% endif %}>0.5</option>
+                        <option value="1" {% if tipo_grafica_seleccionada == "dispersion" and opciones_ads[4] == "1"%}selected{% endif %}>1</option>
+                        <option value="1.5" {% if tipo_grafica_seleccionada == "dispersion" and opciones_ads[4] == "1.5"%}selected{% endif %}>1.5</option>
+                        <option value="2" {% if tipo_grafica_seleccionada == "dispersion" and opciones_ads[4] == "2"%}selected{% endif %}>2</option>
+                        <option value="area" {% if tipo_grafica_seleccionada == "dispersion" and opciones_ads[4] == "area"%}selected{% endif %}>area</option>
                     </select>
 
                 <div name="colores_pts_dispr">
                     <label for="select_colores_pts_dispr">colores</label>
                     <select name="select_colores_pts_dispr">
-                        <option value="c">c</option>
-                        <option value="random">random</option>
+                        <option value="c" {% if tipo_grafica_seleccionada == "dispersion" and opciones[5] == "c" %}selected{% endif %}>c</option>
+                        <option value="random" {% if tipo_grafica_seleccionada == "dispersion" and opciones[5] == "random" %}selected{% endif %}>random</option>
                     </select>
                 </div>
 
                 <div>
                     <label for="input_alfa_disp">alfa</label>
-                    <input type="text" name="input_alfa_disp">
+                    <input type="text" name="input_alfa_disp" {% if tipo_grafica_seleccionada == "dispersion" %} value="{{ opciones_ads[6] }}"{% endif %}>
                 </div>
 
                 </div>
@@ -445,13 +445,30 @@
                                 <label for="grid_para_disp_select"></label>
 
                                 <select name="grid_para_disp_select" >
-                                    <option value="False">desactivado</option>
-                                    <option value="True">activado</option>
+                                    <option value="False" {% if tipo_grafica_seleccionada == "disperson" and settings_ads[0] == "False" %}selected{% endif %}>desactivado</option>
+                                    <option value="True" {% if tipo_grafica_seleccionada == "dispersion" and settings_ads[0] == "True" %}selected{% endif %}>activado</option>
                                 </select>
                             </div>
 
 
-                            <!--settings para la grafica de barras-->
+                            
+                        </div>
+
+                        <!--settings para la grafica de barras-->
+                        <div id="configuracion_barras" {% if tipo_grafica_seleccionada == "barras" %}style="display: block;"{% else %}style="display: none;" {% endif %}>
+                            
+                            <div id="agregar_linea_barras">
+                                <label for="select_agregar_linea_barras">agregar linea</label>
+                                <select name="select_agregar_linea_barras">
+                                    <option value="False"{% if tipo_grafica_seleccionada == "barras" and settings_ads[0] == "False" %}selected{% endif %}>desactivado</option>
+                                    <option value="True"{% if tipo_grafica_seleccionada== "barras" and settings_ads[0] == "True" %}selected{% endif %}>activado</option>
+                                </select>
+                            </div>
+
+                            
+
+
+
                         </div>
 
                     </div>
@@ -482,16 +499,18 @@
                     <li><a href="https://www.facebook.com">Facebook</a></li>
                     <li><a href="https://twitter.com">Twitter</a></li>
                     <li><a href="https://www.youtube.com">YouTube</a></li>
-                    <li><a href="https://github.com/kuchinisu/plt-sb_interfaz">GitHub</a></li>
+                    <li><a href="https://github.com/kuchinisu/plt-sb_interfaz" target="_blank">GitHub</a></li>
                 </ul>
             </div>
         
             <div class="footer-section documentacion">
                 <h2>Documentación</h2>
-                <ul>
-                    <li><a href="docs/manual.pdf">Manual de usuario</a></li>
-                    <li><a href="docs/api.pdf">Documentación de la API</a></li>
-                </ul>
+                    <ul>
+                        <li><a href="docs/manual.pdf">Manual de usuario</a></li>
+                        <li><a href="docs/api.pdf">Documentación de la API</a></li>
+                    </ul>
+                <h2>compranos una Dona</h2>
+                <li> <a href="https://www.paypal.com/mx/home" target="_blank">dona en paypal</a></li>
             </div>
         
             <div class="footer-section trabajo">
@@ -594,6 +613,7 @@
         } else EntradaParaFormulasBarra.style.display = "none";
     });
 
+    /// cosas para grafica de pastel
     ///selector de modo de coloreado en la grafica de pastel
     const selectColorPorPastel = document.querySelector("select[name='pastel_colores_por']");
     const pastelColoresPorRango = document.getElementById("pastel_colores_por_rango");
@@ -685,6 +705,21 @@
     barra_pastel_x.addEventListener("input", function() {
         valor_barra_pastel_x.textContent = barra_pastel_x.value;
     });
+
+    // aparecer los settings para fig extra de pastel
+
+    const selectorTipoFiguraPastelExtra=document.querySelector("select[name='figura_extra_pastel']")
+    const settingsBarraExtrPastel=document.getElementById("setting_barra_pastel")
+
+    selectorTipoFiguraPastelExtra.addEventListener("change", function(){
+        settingsBarraExtrPastel.style.display = "none"; 
+
+        const TipoFiguraPastelExtraSeleccionada = selectorTipoFiguraPastelExtra.value;
+        if(TipoFiguraPastelExtraSeleccionada === "barra"){
+            settingsBarraExtrPastel.style.display = "block";
+        }
+    });
+
 
 
     //cosas para grafica de dispercion
