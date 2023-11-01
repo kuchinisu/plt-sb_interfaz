@@ -524,7 +524,14 @@
     
 </body>
 
-<script>// Obtén el elemento select del tipo de gráfico y todos los divs de opciones
+
+<script>
+    // principal
+    // Esta parte del script de js es para mostrar las opciones para el tipo de grafica seleccionada
+    //todas las areas de ajustes para la creacion de las graficas están ocultas, y solo se mostrará el menú 
+    // de opciones especifico del tipo de grafica seleccionado en el select del fprmulario
+    
+    // Obtén el elemento select del tipo de gráfico y todos los divs de opciones
     const tipoGraficaSelect = document.querySelector("select[name='tipo_grafica']");
     const opcionesBarras = document.getElementById("opciones_barras");
     const opcionesDispersion = document.getElementById("opciones_dispersion");
@@ -561,7 +568,13 @@
         }
 
     });
+    // principal end/
 
+
+    // dispersion
+    // Area de ajustes y settings extras de dispersion
+
+    // muestra entrada para kwargs si es q se selecciona como activado
     const DispersionKwargsActivadosONo = document.querySelector("select[name='arg_trazos']");
     const verdaderoKwActDisp = document.getElementById("kwargs_dispersion");
     //cambios 
@@ -578,6 +591,23 @@
         }
     });
 
+    //modo de coloreado de media
+    const tipoColoreadoMedia = document.querySelector("select[name='tipo_mean_color_dispersion']")
+    const selectorColorMedia = document.getElementById("dev_mean_color_dispersion")
+
+    tipoColoreadoMedia.addEventListener("change", function(){
+        selectorColorMedia.style.display = "none";
+
+        const modoColorMediaSeleccionado = tipoColoreadoMedia.value;
+
+        if (modoColorMediaSeleccionado=="seleccionar"){
+            selectorColorMedia.style.display = "block";
+        };
+    });
+    //dispersion end
+
+
+    // barras
     // elementos de modo de color del grafico de barras
     
     const SelectModoDeColorBarras = document.querySelector("select[name='barras_colores_por']");
@@ -599,6 +629,7 @@
 
     ///
     // tipo de agrupacion en las graficas de barra
+        //interactúa con los menus para el tipo de agrupacion de los datos para graficarlos
     
     const SelectTipoDeAgrupacionBarras = document.querySelector("select[name='barras_agupar_por']");
     const EntradaParaFormulasBarra = document.getElementById("entrada_para_formula_barras");
@@ -612,6 +643,8 @@
             EntradaParaFormulasBarra.style.display = "block";
         } else EntradaParaFormulasBarra.style.display = "none";
     });
+
+    // barra end
 
     /// cosas para grafica de pastel
     ///selector de modo de coloreado en la grafica de pastel
@@ -632,6 +665,7 @@
         } 
     });
 
+    // creo que esta parte no sirve en realidad, recuerdo que intentaba hacer algo pero no recuerdo que 
     const formularioCompleto = document.getElementById("formulario");
     const settingsPastel = document.getElementById("configuracion_pastel")
 
@@ -644,9 +678,18 @@
     if (grafSeleccionado === "pastel"){
         settingsPastel.style.display = "block"
     }
-    
+        // me parece que lo que intentaba hacer con esto mejor lo hice usando jinja
+                    //ah ya recuerdo que intentaba, quería que no se eliminaran las opciones en los settings 
+                    //extras de edicion del grafico, pero mejor simplemente use jinja para devolver los valores
+                    // dados a la funcion 'gener' en el archivo matplt.py ya que esta a su vez los regrasa nuevamente
+                    // al formulario html. 'gener' es la funcion que interactúa directamente con la interfaz de html, 
+                    // esta en el arcivo flaskr/matplt.py
 
 });
+
+    // de ser activado el autopack para la grafica de pastel
+    //en las funciones del backend mostrará el porcentaje al que equivale la rebanada del pastel, y además se va a
+    //otro select para esoger si se quiere mostrar el total del valor de la rebanada junto al porcentaje
 
     const selectorAutopacPastel = document.querySelector("select[name='selector_autopack_pastel']");
     const selectorMostrarTotalPastel = document.getElementById("total_pct_pastel");
@@ -661,6 +704,8 @@
         };
     });
 
+    // al activarse como la opcion de si mostrar el total de las unidades de la rebanada se activa una entrada
+    // para poner el tipo de unidad al que equivale este total si es que se quiere
     const totalPastelesActivarSelector = document.querySelector("select[name='total_pct_pastel_activar']")
     const unidadesDeTotalesPastel = document.getElementById("unidades_de_totales_pastel")
 
@@ -675,7 +720,9 @@
 
     });
 
-
+    // al activar que se muestre una leyenda en el backend va a mostrar esa leyenda en la grafica de pastel
+    // y la siguiente parte del script mostrará las opciones de ajustes para la leyenda; la ubicacion dentro del 
+    // grafico y los inptur range para ajustar la ubicacion de esta
     const legendPastel = document.querySelector("select[name='legend_pastel']");
     const settingsLeyendaPastel = document.getElementById("opciones_leyenda_pastel");
 
@@ -690,20 +737,24 @@
     });
 
 
+    // al cambiar el rango del input range se tiene que ajustar el numero que aparece abajo de esta, para
+    // visualizar el valor de esta
+
     tipoGraficaSelect.dispatchEvent(new Event("change"));
     
     const barra_pastel_y = document.getElementById("legend_loc_y_pastel");
     const valor_barra_pastel_y = document.getElementById("value_legend_loc_y_pastel");
 
     barra_pastel_y.addEventListener("input", function() {
-    valor_barra_pastel_y.textContent = barra_pastel_y.value;
+    valor_barra_pastel_y.textContent = barra_pastel_y.value; // aqui cambia el valor que aparece bajo el input según el valor que tenga el input,
+                                                                // se va cambiando a medida ajustas este input
     });
 
     const barra_pastel_x = document.getElementById("legend_loc_x_pastel");
     const valor_barra_pastel_x = document.getElementById("value_legend_loc_x_pastel");
 
     barra_pastel_x.addEventListener("input", function() {
-        valor_barra_pastel_x.textContent = barra_pastel_x.value;
+        valor_barra_pastel_x.textContent = barra_pastel_x.value; // aqui sucede lo mismo pero con la segunda entrada range
     });
 
     // aparecer los settings para fig extra de pastel
@@ -719,25 +770,5 @@
             settingsBarraExtrPastel.style.display = "block";
         }
     });
-
-
-
-    //cosas para grafica de dispercion
-    //modo de coloreado de media
-    const tipoColoreadoMedia = document.querySelector("select[name='tipo_mean_color_dispersion']")
-    const selectorColorMedia = document.getElementById("dev_mean_color_dispersion")
-
-    tipoColoreadoMedia.addEventListener("change", function(){
-        selectorColorMedia.style.display = "none";
-
-        const modoColorMediaSeleccionado = tipoColoreadoMedia.value;
-
-        if (modoColorMediaSeleccionado=="seleccionar"){
-            selectorColorMedia.style.display = "block";
-        };
-    });
-
-
-
 </script> 
 </html>

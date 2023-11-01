@@ -87,6 +87,8 @@ def dispercion(x, y, ax, args_t, **kwargs):
     #    return False
 
 
+    
+
 #grafico de barras
 
 def barras_superpuestas(x,y,ax,width):

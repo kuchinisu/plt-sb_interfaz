@@ -66,6 +66,7 @@ def entrada_de_formulas(x_, y_, formula_str):
         return x, resultados
     else:
         raise ValueError(f'{formula_str} no es un str')
+    #aun no funciona la netrada de formula para grupamiento
 
 
 def get_sumatoria_p_grupo(x,y):
@@ -100,6 +101,7 @@ def orfenar_min_may(x,y):
             if y[j] < y[j + 1]:
                 y[j], y[j + 1] = y[j + 1], y[j]
                 x[j], x[j + 1] = x[j + 1], x[j]
+    # mediante un metodo de burbuja ordena de mayor a menor los datos
     
     return x, y
 
@@ -127,6 +129,9 @@ def get_mediana_p_grupo(x, y):
                 mediana=grupo[0]
             else:
                 mediana=0
+            # si la lista de numeros no tiene u numero en el medio, o es una cantidad que se puede dividir 
+            # entre 2, entonces se toma el ultimo numero de la primera mitad, el primer numero de la segunda mitad
+            # y se saca la media entre estos 2, así obteniendo una mediana 
         else:
             if len(grupo) > 0:
                 mediana = grupo[math.floor(len(grupo) / 2)]
@@ -157,3 +162,10 @@ def get_grupo_p_moda(x,y):
 
                
     return x_key, lista_modas
+
+    # obtiene la moda de una lista de numeros, de la lista de numeros toma uno por uno, de ese numero busca
+    # todas las posiciones donde existe un valor igual, y esto obtiene una lista de las posiciones y toma 
+    # la longitud de esta lista, y lo compara con el conteo maximo, si lo supera ese numero ocupa la posicion
+    # de la moda, se obtiene el siguente numero, busca las posiciones en as que se repite, los vuelve a anotar
+    # en una lista de sus posiciones, lo compara de nuevo con el conteo maximo, y si lo supera el conteo máximo se
+    # actualiza a ese nuevo conteo y la moda se actualiza tambien

@@ -1,0 +1,12 @@
+este proyecto está hecho para funcionar como una interfaz online de las librerías matplotlib y seaborn, pero
+por el momento solo estoy desarrollando la parte de matplotlib y por el momento solo tengo subidas las actualizaciones
+para la creacion de graficos de pastel, barras y dispersion, siendo la de pastel la más completa hasta ahora.
+
+en los modos de coloreado de cada grafica por ahora solo funcionan el color por rango, las entradas de lsitas de colores aún no
+y algunas otras entradas como las de svg tampoco.
+
+cuando comencé este proyecto ya estaba trabajando en algo para usar matplotlib y seabor mediante interfaz grafica,
+pero luego me decidí a aprender a usar flask y sus heramientas como jinja, cuando terminé de leer la documentacion
+de la pagina de flask y completar el proyecto tutorial de esta misma pagina fue cuando me puse a desarrollar 
+este proyecto, por lo que dentro de este encontrarás cosas de la documentacion de flask, como el blog simple
+y el modo d crear posts de este, tmb en el init definida la pagina de hellow word y otras cosillas

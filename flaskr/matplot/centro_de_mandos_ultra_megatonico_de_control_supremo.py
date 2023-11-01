@@ -16,3 +16,5 @@ def super_receptor_de_comandos(mando):
         raise ValueError (f"no existe la funcion {mando}") 
 
 
+# el super_receptor_de_comandos funciona a modo de puente, es una funcion con un diccionario de las funciones y
+# se devuelven según el tipo de grafica seleccionada en el formulario html 

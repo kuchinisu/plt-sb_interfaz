@@ -10,9 +10,11 @@ import os
 bp = Blueprint("matplt", __name__)
 @bp.route('/', methods=('GET', 'POST'))
 
+#####funcion principal, esta interactúa con el formulario de la interfaz, toma los datos ingresados para los graficos
+# y las opciones para los graficos
 def gener():
     print("a")
-    nam=crear_uui()
+    nam=crear_uui()#crea un nombre para el archivo de la imagen del grafico
     opciones_ads=[[]]
     tipo_grafica_seleccionado=''
     opciones=[[],[]]
@@ -27,19 +29,30 @@ def gener():
     nam_txt=''
     img_Gen=False
     if request.method == 'POST':
+        #recoge el tipo de grafico seleccionado en el select de formulario html
         tipo_grafica_seleccionado = request.form.get('tipo_grafica')
-        contenido = request.files['archivo']
+        contenido = request.files['archivo'] #toma el archivo dado en el formulario html
         
         if contenido:
             array_contenido=pd.read_csv(contenido)
             nam_txt=crear_uui()
             array_contenido.to_csv(f'{rut_txt}{nam_txt}.txt', sep='\t', index=False)
+            #al archivo convertido en un array se guarda como .txt en la carpeta ./flask/output_tx/docs
+            #aqui estamos dentro de la carpeta flaskr/ por lo que la carpeta /output_tx esta aquí tmb.
+            #esto se hace con la intencion de guardar el contenido del archivo y poder reutilizarlo incluso
+            #despues de refrescar la pagina al hacerse el submit
 
 
         elif request.form['array_escondido']:
             nam_request=request.form['array_escondido']
             array_contenido = pd.read_csv(f'{rut_txt}{nam_request}.txt', sep='\t')
             nam_txt=nam_request
+            #si ya no existe el archivo introducido en el inptut file del formulario quiere decir que la pagina
+            #se refrescó, pero cuando creas por primera vez el grafico, el nombre y drectorio de este se guarda 
+            #en el value de un imput oculto dentro del html, llamado 'array_escondido', este input obtiene esta
+            # informacion ya que se le pasa este dato dentro del return de la funcion, entonces, cuando ya no existe
+            # el archivo dentro del input file, se busca la informacion del nombre y ruta del array convertido 
+            # en txt en el input oculto, y se recupera de este txt y se vuelve a convertir en array 
         else:
             raise ValueError("no hay no documento ni array")
           
@@ -47,9 +60,12 @@ def gener():
         columnas=request.form['columnas']
 
         x, xhor = num_or(filas)
-        y, yhor = num_or(columnas) 
+        y, yhor = num_or(columnas)# funciones dentro del archivo funciones.py, toman la letra o numero de las 
+                                    #filas o culumnas del archivo csv o excel y devuelven a q numero equivalen y si están
+                                    # en vertical u horizontal, esto lo pide así la funcion de controlador más adelante 
 
         
+        #llama a la funcion para obtener los datos del formulario según el tipo de grafica escogida
         if tipo_grafica_seleccionado == 'barras':
             opciones = obtener_opciones_barras()
             
@@ -66,10 +82,11 @@ def gener():
                     
         opciones_ads=[]
         for op in opciones[0]:
-                opciones_ads.append(str(op))
+                opciones_ads.append(str(op))#las opciones_ads se devuelven al formulario html para no perderse
+                                                #al refrescarse la pagina 
         settings_ads=[]
         for setints_ in opciones[1]:
-            settings_ads.append(str(setints_))
+            settings_ads.append(str(setints_)) #lo mismo con los settings
 
 
 
@@ -82,8 +99,13 @@ def gener():
         
         if request.form['uii_oculto']:
             nam=request.form['uii_oculto']
+            #si ya se crea el grafico, el nombre de este fue devuelto al formulario html, si se quiere volver a 
+            #crear despues de editarlo para actualizarlo a las nuevas opciones se guarda con el mismo nombre
+            #para evitar que se acumulen imagenes inecesarias cada que se refresque la pagina, así solo se sobreescribe
+            #el archivo
 
-        
+        #el controlador recibe todos los datos, a partir del controlador se comienza a acceder a las 
+        #funciones más profundas dentro del backend encargadas de la creacion de los graficos
         controlador(rut,nam ,array_contenido, xhor, yhor,x, y, tipo_grafica_seleccionado, opciones)
         fig=f"{rut.replace('.','')}{nam}.png"
         rut_temp=f"salida_test/{nam}.png"
@@ -141,6 +163,7 @@ def obtener_opciones_dispercion():
     opciones = [titulo, trazos, arg_trazos, mean_color,tma_pts,colores_pts,alfa]
     return [opciones, settings]
 
+    #obtiene los settings extras para la edicion del grafico de dispersion que aparecen despues de crear la grafica
 def obtener_settings_dipsersion():
     activar_grid=request.form.get('grid_para_disp_select')
     
@@ -185,6 +208,7 @@ def obtener_opciones_barras():
     args_list = [colores, y_label, x_label, figzise, width, agrupado]
     return [args_list, settings]
 
+#obtiene los setings del grafico de barras que aparecen despues de crear el grafico
 def obtener_settings_barras():
     linea = request.form.get('select_agregar_linea_barras')
     if not linea:
@@ -231,6 +255,7 @@ def obtener_lista_de_pastel(array_contenido):
     setting_extras=obtener_settings_extras_pastel(array_contenido)
     return [args_list, setings_pastel, [None]]
 
+#obtiene los setings de pastel que aparecen despues de la creacion de la grafica
 def obtener_settings_pastel():
     autopack_activado=request.form.get('selector_autopack_pastel')
     
@@ -305,6 +330,8 @@ def obtener_settings_pastel():
 
     return lista_de_settings
 
+#obtiene el tipo de figura extra agregada a la graifica de pastel, si se selecciono una
+#llamará a la funcion que recoge las opciones de ajustes de la grafica escogida 
 def obtener_settings_extras_pastel(array_contenido):
     figura_extra=request.form.get('figura_extra_pastel')
     if figura_extra == "--":
@@ -315,7 +342,7 @@ def obtener_settings_extras_pastel(array_contenido):
         
     return 
 
-
+#funcion que recoge las opciones para la grafica de barras en la grafica de pastel
 def get_barra_pastel(array_contenido):
     arch_m_n=request.form.get('pastel_barra_mism_arch_nuev')
 
@@ -352,16 +379,7 @@ def get_barra_pastel(array_contenido):
 
 ######################## end pastel ##################
 
+
 def obtener_lista_de_str(inp_lista):
     lista=[palabra.strip() for palabra in inp_lista.split()]
     return lista
-
-
-    
- #try:  
-            #controlador(array_contenido, xhor, yhor,x, y, tipo_grafica_seleccionado, opciones)
-        #except:
-            #ocpiones_valores=[] 
-            #for i in opciones:
-                #ocpiones_valores.append(f"{i}:{type(i)} \n")
-            #raise ValueError(f"{ocpiones_valores}")
