@@ -253,7 +253,7 @@ def obtener_lista_de_pastel(array_contenido):
 
     setings_pastel=obtener_settings_pastel()
     setting_extras=obtener_settings_extras_pastel(array_contenido)
-    return [args_list, setings_pastel, [None]]
+    return [args_list, setings_pastel, setting_extras]
 
 #obtiene los setings de pastel que aparecen despues de la creacion de la grafica
 def obtener_settings_pastel():
@@ -335,12 +335,13 @@ def obtener_settings_pastel():
 def obtener_settings_extras_pastel(array_contenido):
     figura_extra=request.form.get('figura_extra_pastel')
     if figura_extra == "--":
-        figura_extra=None
+        figura_extra=[None]
 
     if figura_extra=="barra":
-        barra = get_barra_pastel(array_contenido)
+        figura_extra = get_barra_pastel(array_contenido)
         
-    return 
+        
+    return figura_extra
 
 #funcion que recoge las opciones para la grafica de barras en la grafica de pastel
 def get_barra_pastel(array_contenido):

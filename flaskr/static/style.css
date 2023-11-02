@@ -113,23 +113,23 @@ input[type=submit] { align-self: start; min-width: 10em; }
 }
 
 .image-container {
-    flex: 1; /* Ocupa 1/2 del espacio disponible */
+    flex: 1; 
 }
 
 .config-container {
-    flex: 1; /* Ocupa 1/2 del espacio disponible */
-    padding: 20px; /* Agrega espaciado alrededor del contenido de configuración */
+    flex: 1; 
+    padding: 20px; 
     
 }
 
 .config-container input {
     margin-bottom: 20px;
-    background-color: #555558; /* Cambia el color de fondo de los campos de entrada a gris claro */
-    color: #d5d5d5; /* Cambia el color del texto a gris oscuro */
-    border: 1px solid #999; /* Cambia el color del borde a gris claro */
-    border-radius: 5px; /* Agrega bordes redondeados */
-    padding: 5px; /* Añade un relleno interior de 10px */
-    font-size: 16px; /* Cambia el tamaño del texto */
+    background-color: #555558; 
+    color: #d5d5d5; 
+    border: 1px solid #999; 
+    border-radius: 5px; 
+    padding: 5px; 
+    font-size: 16px; 
 }
 .config-container select{
     background-color: #333;
@@ -145,14 +145,14 @@ input[type=submit] { align-self: start; min-width: 10em; }
 
 #footer {
     display: flex;
-    justify-content: space-around; /* Distribuye las secciones equitativamente en el espacio disponible */
+    justify-content: space-around; 
     padding: 20px;
-    background-color: #333; /* Cambia el color de fondo según tu preferencia */
-    color: #fff; /* Cambia el color del texto según tu preferencia */
+    background-color: #333; 
+    color: #fff; 
 }
 
 .footer-section {
-    flex: 1; /* Ocupa 1/3 del espacio disponible */
+    flex: 1; 
     padding: 10px;
 }
 
@@ -171,7 +171,7 @@ input[type=submit] { align-self: start; min-width: 10em; }
 }
 
 .footer-section a {
-    color: #fff; /* Cambia el color de los enlaces según tu preferencia */
+    color: #fff; 
     text-decoration: none;
 }
 
@@ -223,13 +223,13 @@ input[type=submit] { align-self: start; min-width: 10em; }
 }
 
 .settings label {
-    font-weight: bold; /* Hace que las etiquetas de formulario sean negritas */
+    font-weight: bold; 
     color: #a1a8ac;
     margin-bottom: 10px;
 }
 .settings input{
-    width: 10%; /* Hace que los campos de texto y los selects ocupen todo el ancho del contenedor */
-    margin-bottom: 10px; /* Agrega un margen inferior de 10px a los campos de entrada y selects */
+    width: 10%; 
+    margin-bottom: 10px; 
     
 }
 
@@ -237,10 +237,9 @@ input[type=submit] { align-self: start; min-width: 10em; }
 
 
 #formulario {
-    width: 100%; /* Establece un ancho fijo del 80% del ancho de la ventana */
-    /* O bien, puedes usar max-width para limitar el ancho máximo */
-    /* max-width: 800px; /* Establece un ancho máximo de 800 píxeles */
-    margin: 0 auto; /* Centra el div horizontalmente en la pantalla */
+    width: 100%; 
+    
+    margin: 0 auto; 
 }
 
 
@@ -250,3 +249,4 @@ input[type=submit] { align-self: start; min-width: 10em; }
 }
 
 
+/* no soy bueno en css*/

@@ -161,62 +161,73 @@ def svg_filter_pie(ax,filter_def, labels):
     print(f"Saving '{fn}'")
     ET.ElementTree(tree).write(fn)
 
+
+#funcion que retorna otra funcion, esta funcion retornada luego puede ser llamada con '()' por lo que
+#al usarse 'fig_extra_pastel' se usan dobles parentesis 'fig_extra_pastel(figura_extra)(args_de_la_funcion)'
 def fig_extra_pastel(fig_extra):
     diccionario = {
         "barra": barra_pastel
     }
-
+ 
     if fig_extra in diccionario:
         return diccionario[fig_extra]
     
-
-def barra_pastel(ax2, ax1, x_len, wedges, angulo_rebanada_conectada,rebanada_a_conectar ,argumentos_lista,):
-    ratios,labels,bottom,width,color,titulo=argumentos_lista
+#la funcion 'barra pastel' es creada con el grafmento del codigo adaptado de la documentacion de matplotlib:
+#https://matplotlib.org/stable/gallery/pie_and_polar_charts/bar_of_pie.html#sphx-glr-gallery-pie-and-polar-charts-bar-of-pie-py
+# en ese articulo muestra como hacer una grafica de pastel y añadirle una grafica de barras superpuesta.
+# de este articulo se toma el codigo para configurar la barra pero es adaptado para funcionar de forma más
+# dinamica para usarse dentro de una funcion con diferentes valores ingresados según la necesidad 
+def barra_pastel(ax2, ax1, x_len, wedges, angulo_rebanada_conectada,argumentos_lista,):
+    ratios,labels,bottom,width,color,titulo,rebanada_a_conectar=argumentos_lista
+    ax2=ax2
+    ax1=ax1
+ 
+    max_alfa_val = 1/len(labels)-.1 # obtiene el porcentaje del rango para los valores alfa
+                                    # alfa solo puede ser un rango de entre 0-1. para asegurarse
+                                    # de que cada parte de la barra tendrá un nivel de alfa diferente
+                                    # se tiene que asignar un porcentaje de valor alfa para cada label osea, para cada barra
 
     for j, (height, label) in enumerate(reversed([*zip(ratios, labels)])):
         bottom -= height
         bc = ax2.bar(0, height, width, bottom=bottom, color=color, label=label,
-                    alpha=0.1 + 0.25 * j)
+                    alpha=0.1 + max_alfa_val * j)#en esta parte justamente, el alfa comienza siendo dde 0.1 y se le suma el max_val alfa,
+                                                    # si el len de la lista de ratios y labels es de 4, entonces cada uno equivale a .25 
+                                                    # y se le multimplica por el numero de index de cada dato en la lista para cada barra
+                                                    # por ejemplo son 4 ratios y labels; entoces el valor de alfa a cada barra será; 0.1 + 0.25*0 = .1, 
+                                                    # 0.1 + 0.25 * 1= .35, 0.1 + 0.25*2 = .6,  0.1 + 0.25 * 3 = .85
+                                                    # por lo que la lista de valores alfa es de = .1, .35, .6, .85
         ax2.bar_label(bc, labels=[f"{height:.0%}"], label_type='center')
 
     ax2.set_title(titulo)
     ax2.legend()
     ax2.axis('off')
-    ax2.set_xlim(- 2.5 * width, 2.5 * width)
+    x_limit=max_alfa_val*100
+    ax2.set_xlim(- x_limit * width, x_limit * width)
 
-    # use ConnectionPatch to draw lines between the two plots
-    theta1, theta2 = wedges[0].theta1, wedges[0].theta2
-    center, r = wedges[0].center, wedges[0].r
+    theta1, theta2 = wedges[rebanada_a_conectar].theta1, wedges[rebanada_a_conectar].theta2
+    center, r = wedges[rebanada_a_conectar].center, wedges[rebanada_a_conectar].r
     bar_height = sum(ratios)
 
-    # draw top connecting line
-    x = r * np.cos(np.pi / angulo_rebanada_conectada * theta2) + center[rebanada_a_conectar]
-    y = r * np.sin(np.pi / angulo_rebanada_conectada * theta2) + center[rebanada_a_conectar % len(center)]
+    x = r * np.cos(np.pi / angulo_rebanada_conectada * theta2) + center[0]
+    y = r * np.sin(np.pi / angulo_rebanada_conectada * theta2) + center[1]
     con = ConnectionPatch(xyA=(-width / 2, bar_height), coordsA=ax2.transData,
                         xyB=(x, y), coordsB=ax1.transData)
-    list_set_color=[]
-    for x_i in x_len:
-        list_set_color.append(0)
-    con.set_color(list_set_color)
+    
+    con.set_color([0 for i in range(len(ratios))])
     con.set_linewidth(4)
     ax2.add_artist(con)
 
-    x = r * np.cos(np.pi / angulo_rebanada_conectada * theta1) + center[rebanada_a_conectar]
-    y = r * np.sin(np.pi / angulo_rebanada_conectada * theta1) + center[rebanada_a_conectar % len(center)]
+    x = r * np.cos(np.pi / angulo_rebanada_conectada * theta1) + center[0]
+    y = r * np.sin(np.pi / angulo_rebanada_conectada * theta1) + center[1]
     con = ConnectionPatch(xyA=(-width / 2, 0), coordsA=ax2.transData,
                         xyB=(x, y), coordsB=ax1.transData)
-    con.set_color(list_set_color)
+    con.set_color([0 for i in range(len(ratios))])
     ax2.add_artist(con)
-    con.set_linewidth(4) 
-
-
+    con.set_linewidth(4)
 
     return ax2
 
-
 #/
-
-
 
 #funciones para obtener y manejar datos
 

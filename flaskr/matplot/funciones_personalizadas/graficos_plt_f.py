@@ -283,85 +283,8 @@ def pastel(x,y,ax, tot_list ):
         plt.setp(autotexts_ax1, size=8, weight="bold")
     
     if fig_extra is not None:
-        ax2=fig_extra_pastel(fig_extra=fig_extra)(ax2, ax1, len(x) ,wedges_ax1, angulo, fig_extra_settings)
+        ax2=fig_extra_pastel(fig_extra=fig_extra)(ax2, ax1, len(x) ,wedges_ax1, startangle, fig_extra_settings)
         return ax1, ax2
     else:
         return ax1
-
-
-
-def pastel_con_barra(x,explode_p,labels,colores,bar_ratios,bar_labels,radius=3,wedgeprops={"linewidth": 1, "edgecolor": "white"}, frame=True,title=None):
-    fig, (ax1,ax2) = plt.subplots(1, 2, figsize=(9, 5))
-    fig.subplots_adjust(wspace=0)
-
-    #ajustes del pastel (tengo ganas de pastel)
-    overall_ratios=list_porcentaje(x)
-    explode=[0 for _ in range(len(x))]
-    explode[explode_p]+=0.1
     
-    angles = np.linspace(0,-360, len(x))
-
-    angle = angles[explode_p] * overall_ratios[explode_p]
-
-    if isinstance(colores, list):
-        colors = colores
-    elif isinstance(colores, str):
-        colors=plt.get_cmap(colores)(np.linspace(0.2,0.7,len(x)))
-    else:
-       raise ValueError("el parametro 'colores' espera como argumento el nombre de un color o una lista de colores")
-
-    wedges, *_ = ax1.pie(overall_ratios, autopct='%1.1f%%', startangle=angle,
-                     labels=labels, explode=explode,colors=colors)
-
-    #parametros de la barra
-    bar_ratios = bar_ratios
-    bar_labels = bar_labels 
-    bottom = 1
-    width = .2
-
-    #leyendas
-    for j, (height, label) in enumerate(reversed([*zip(bar_ratios, bar_labels)])):
-        bottom -= height
-        bc = ax2.bar(0, height, width, bottom=bottom, color='C0', label=label,
-                    alpha=0.1 + 0.25 * j)
-        ax2.bar_label(bc, labels=[f"{height:.0%}"], label_type='center')
-    
-    if title:
-        ax2.set_title(title)
-    #theta1
-    ax2.legend()
-    ax2.axis('off')
-    ax2.set_xlim(- 2.5 * width, 2.5 * width)
-
-    
-    theta1, theta2 = wedges[0].theta1, wedges[0].theta2
-    center, r = wedges[0].center, wedges[0].r
-    bar_height = sum(bar_ratios)
-
-    #lineas
-
-    # linea superior
-    pos_ange=abs(angle)
-    
-    x,y = conectin_x_y_line(r,pos_ange,theta2,center)
-    con = ConnectionPatch(xyA=(-width / 2, bar_height), coordsA=ax2.transData,
-                        xyB=(x, y), coordsB=ax1.transData)
-    con.set_color([0 for _ in range(len(bar_ratios))])
-    con.set_linewidth(len(bar_ratios))
-    ax2.add_artist(con)
-
-    #liena inferior
-    
-    
-    x,y = conectin_x_y_line(r,pos_ange,theta1,center)
-    con = ConnectionPatch(xyA=(-width / 2, 0), coordsA=ax2.transData,
-                        xyB=(x, y), coordsB=ax1.transData)
-    con.set_color([0 for _ in range(len(bar_ratios))])
-    ax2.add_artist(con)
-
-
-
-    con.set_linewidth(len(bar_ratios))
-
-    plt.show()
-#y
