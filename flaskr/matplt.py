@@ -3,9 +3,9 @@ from flask import (
 )
 from .matplot.base import controlador
 from .matplot.funciones_personalizadas.funciones import num_or, list_args_convert, crear_uui, str_a_dicc, lista_de_funciones, lista_de_tipos, get_datas
+
 import pandas as pd
-import ast 
-import os
+
 
 bp = Blueprint("matplt", __name__)
 @bp.route('/', methods=('GET', 'POST'))
@@ -79,6 +79,8 @@ def gener():
             for op in opciones:
                 for op_ in op: 
                     opciones_ads.append(str(op_))
+        elif tipo_grafica_seleccionado == 'linea':
+            opciones = obtener_lista_linea(array_contenido)
                     
         opciones_ads=[]
         for op in opciones[0]:
@@ -348,18 +350,17 @@ def get_barra_pastel(array_contenido):
     arch_m_n=request.form.get('pastel_barra_mism_arch_nuev')
 
     if arch_m_n=="mismo":
-        array_contenido=array_contenido
+        contenido=array_contenido
 
     if arch_m_n=="nuevo":
-        contenido=request.form['entrada_arch_barra_pastel_input']
-        array_contenido=pd.read_csv(contenido)
+        contenido=array_contenido
     filas=request.form['f_c_barra_pastel_y']
     columnas=request.form['f_c_barra_pastel_x']
     
     x_, xhor = num_or(filas)
     y_, yhor = num_or(columnas) 
 
-    x,y=get_datas(xhor,yhor,x_,y_,array_contenido)
+    x,y=get_datas(xhor,yhor,x_,y_,contenido)
 
     bottom=request.form['bottom_barra_pastel']
     if not bottom:
@@ -373,13 +374,98 @@ def get_barra_pastel(array_contenido):
 
     titulo=request.form['titulo_barra_pastel']
     
-    lista_args=[x,y,bottom,width,colores,titulo]
+    rebanada_conectada=request.form['pastel_rebanada_conectada_barra']
+    if not rebanada_conectada:
+        rebanada_conectada=None
+    
+    lista_args=[x,y,bottom,width,colores,titulo,rebanada_conectada]
         
 
     return lista_args
 
 ######################## end pastel ##################
 
+
+#################### linea ###################
+def obtener_lista_linea(array_contenido):
+    nueva_file = request.form.get('linea_select_dat')
+
+    if nueva_file == 'mismos_datos_linea':
+        contenido=array_contenido
+    elif nueva_file == 'nuevos_datos_linea':
+        contenido=request.form['entrada_arch_barra_pastel_input']
+
+    else:
+        raise ValueError("sin datos y ni contenido")
+
+    filas=request.form['inp_linea_segunda_linea_dx']
+    columnas=request.form['inp_linea_segunda_linea_dy']
+
+    if filas and columnas:
+        x_, xhor = num_or(filas)
+        y_, yhor = num_or(columnas) 
+        x,y=get_datas(xhor,yhor,x_,y_,array_contenido)
+    else:
+        x,y=(None,None)
+
+    linewidth=request.form['liena_linewidth']
+    if not linewidth:
+        linewidth = "0.1"
+    else:
+        if linewidth == '--':
+            linewidth="0.1"
+
+
+    
+    lista_args = [x,y,linewidth]
+
+    settings = obtener_settings_linea(array_contenido)
+
+    listas=[lista_args, settings, [None]]
+    return listas
+
+def obtener_settings_linea(array_contenido):
+    figura_extra=request.form.get('select_linea_figextra')
+    if not figura_extra:
+        figura_extra=None
+        settings_fig_extra=[None]
+    else:
+        if figura_extra == '--':
+            figura_extra = None
+            settings_fig_extra=[None]
+        elif figura_extra == "linea":
+            settings_fig_extra=get_linea_linea(array_contenido)
+
+    settings=[figura_extra]
+
+    return settings
+
+def get_linea_linea(array_contenido):
+    """
+    nueva_file=request.form.get('linea_fig_extra_nuev_dat')
+    if nueva_file == 'mismos_datos_linea':
+        contenido=array_contenido
+    elif nueva_file == 'nuevos_datos_linea':
+        contenido=request.form['entrada_arch_barra_pastel_input']
+    
+
+    filas=request.form['inp_linea_segunda_linea_dx']
+    columnas=request.form['inp_linea_segunda_linea_dy']
+
+    if filas and columnas:
+        x_, xhor = num_or(filas)
+        y_, yhor = num_or(columnas) 
+        x,y=get_datas(xhor,yhor,x_,y_,array_contenido)
+
+    lista=[x, y, "1"]
+    settings=[None]
+    fig_extra=[None]
+
+    total=[lista,settings,fig_extra]
+    """
+    return 
+
+################ end linea ###################
 
 def obtener_lista_de_str(inp_lista):
     lista=[palabra.strip() for palabra in inp_lista.split()]

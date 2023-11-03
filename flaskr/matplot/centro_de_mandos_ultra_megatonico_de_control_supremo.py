@@ -6,8 +6,8 @@ def super_receptor_de_comandos(mando):
     diccionario_hdspm={
         "dispersion":dispercion,
         "pastel":pastel,
-        "pastel_con_barra":pastel_con_barra,
-        "barras":barras
+        "barras":barras,
+        "linea": grafica_plot
     }
 
     if mando in diccionario_hdspm:

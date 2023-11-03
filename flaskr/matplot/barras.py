@@ -291,14 +291,17 @@ ax2.legend()
 ax2.axis('off')
 ax2.set_xlim(- 2.5 * width, 2.5 * width)
 
+
+
+
 # use ConnectionPatch to draw lines between the two plots
 theta1, theta2 = wedges[0].theta1, wedges[0].theta2
 center, r = wedges[0].center, wedges[0].r
 bar_height = sum(age_ratios)
 
 # draw top connecting line
-x = r * np.cos(np.pi / 360 * theta2) + center[0]
-y = r * np.sin(np.pi / 360 * theta2) + center[1]
+x = r * np.cos(np.pi / 180 * theta2) + center[0]
+y = r * np.sin(np.pi / 180 * theta2) + center[1]
 con = ConnectionPatch(xyA=(-width / 2, bar_height), coordsA=ax2.transData,
                       xyB=(x, y), coordsB=ax1.transData)
 con.set_color([0, 0, 0])
@@ -314,8 +317,62 @@ con.set_color([0, 0, 0])
 ax2.add_artist(con)
 con.set_linewidth(4)
 
+
+
 plt.show()
 
 
 360*33/100
 
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+fig, (ax1, ax2) = plt.subplots(2, 1, layout='constrained')
+#fig, ax1 = plt.subplots()
+
+dt = 0.01
+t = np.arange(0, 30, dt)
+
+# Fixing random state for reproducibility
+np.random.seed(19680801)
+
+
+nse1 = np.random.randn(len(t))                 # white noise 1
+nse2 = np.random.randn(len(t))                 # white noise 2
+r = np.exp(-t / 0.05)
+
+cnse1 = np.convolve(nse1, r, mode='same') * dt   # colored noise 1
+cnse2 = np.convolve(nse2, r, mode='same') * dt   # colored noise 2
+
+# two signals with a coherent part and a random part
+s1 = 0.01 * np.sin(2 * np.pi * 10 * t) + cnse1
+s2 = 0.01 * np.sin(2 * np.pi * 10 * t) + cnse2
+ax1.plot(t,s1, lista_test, lista_test)
+ax1.set_xlim(0, 5)
+ax1.set_xlabel('Time (s)')
+ax1.set_ylabel('s1 and s2')
+ax1.grid(True)
+
+cxy, f = ax2.csd(s1, s2, 256, 1. / dt)
+ax2.set_ylabel('CSD (dB)')
+
+plt.show()
+t.shape[0]
+type(s2)
+
+lista_test=[]
+for i in range(t.shape[0]):
+    lista_test.append(0)
+lista_test = np.array(lista_test).astype(float)
+
+lista_test

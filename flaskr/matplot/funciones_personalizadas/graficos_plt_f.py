@@ -6,7 +6,52 @@ import matplotlib.cbook as cbook
 from .matematicas import *
 from .funciones import *
 
-# grafica de disperción
+# grafica normal
+
+def grafica_plot(x, y, ax1, tot_list):
+    args_t, lista_editor, fig_extra_settings = tot_list
+    x_2, y_2, linewidth = args_t
+    fig_extra = lista_editor[0]#por ahora esta así, ya que la lista tiene solo un elemento, por lo tanto
+                                # no de desempaqueta el valor NoneType, la variable es tipo lista y como no es NoneType
+                                # se cumple la condicion de que no es None, por lo que crea 2 figuras
+
+    
+    if x_2 is None or y_2 is None:
+        x_2=np.array([0 for i in range(x.shape[0])]).astype(float)
+        y_2=np.array([0 for i in range(x.shape[0])]).astype(float)
+    else:
+        x_2=np.array(x_2).astype(float)
+        y_2=np.array(y_2).astype(float)
+        
+
+
+    if fig_extra is not None:
+        fig, (ax1, ax2) = plt.subplots(2, 1, layout='constrained' )
+        retorna1=False
+    else:
+        fig, ax1 = plt.subplots()
+        retorna1=True
+    
+
+    ax1.plot(x, y, x_2,y_2, linewidth=linewidth)
+
+    ax1.set(xlim=(0, len(x)), xticks=np.arange(1, len(x)),
+        ylim=(0, len(y)), yticks=np.arange(1, len(y)))
+
+    if retorna1:
+        return ax1
+    else:
+        if fig_extra_settings is not None:
+
+            if fig_extra == "plot":
+                
+                x_f, y_f, tot_list_fig_extra= fig_extra_settings
+                ax2 = grafica_plot(x_f, y_f, ax2, tot_list_fig_extra)
+
+        return ax1, ax2
+
+
+#grafica de dispersion
 
 def dict_functs(funct_name, x, y, ax, **kwargs):
     dic_func = {
@@ -78,16 +123,9 @@ def dispercion(x, y, ax, args_t, **kwargs):
         else:
             raise TypeError(f"el valor de 'ad_grid' tiene que ser booleano y es {type(ad_grid)} y contiene {ad_grid}")
         
-        
-
-
         return ax
     
-    #except:
-    #    return False
-
-
-    
+   
 
 #grafico de barras
 

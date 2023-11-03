@@ -181,6 +181,9 @@ def barra_pastel(ax2, ax1, x_len, wedges, angulo_rebanada_conectada,argumentos_l
     ratios,labels,bottom,width,color,titulo,rebanada_a_conectar=argumentos_lista
     ax2=ax2
     ax1=ax1
+    ratios=f_list_porcentaje(ratios)
+
+    
  
     max_alfa_val = 1/len(labels)-.1 # obtiene el porcentaje del rango para los valores alfa
                                     # alfa solo puede ser un rango de entre 0-1. para asegurarse
@@ -196,7 +199,7 @@ def barra_pastel(ax2, ax1, x_len, wedges, angulo_rebanada_conectada,argumentos_l
                                                     # por ejemplo son 4 ratios y labels; entoces el valor de alfa a cada barra será; 0.1 + 0.25*0 = .1, 
                                                     # 0.1 + 0.25 * 1= .35, 0.1 + 0.25*2 = .6,  0.1 + 0.25 * 3 = .85
                                                     # por lo que la lista de valores alfa es de = .1, .35, .6, .85
-        ax2.bar_label(bc, labels=[f"{height:.0%}"], label_type='center')
+        ax2.bar_label(bc, labels=[f"{height:.1%}"], label_type='center')
 
     ax2.set_title(titulo)
     ax2.legend()
@@ -204,26 +207,28 @@ def barra_pastel(ax2, ax1, x_len, wedges, angulo_rebanada_conectada,argumentos_l
     x_limit=max_alfa_val*100
     ax2.set_xlim(- x_limit * width, x_limit * width)
 
-    theta1, theta2 = wedges[rebanada_a_conectar].theta1, wedges[rebanada_a_conectar].theta2
-    center, r = wedges[rebanada_a_conectar].center, wedges[rebanada_a_conectar].r
-    bar_height = sum(ratios)
+    if rebanada_a_conectar is not None:
 
-    x = r * np.cos(np.pi / angulo_rebanada_conectada * theta2) + center[0]
-    y = r * np.sin(np.pi / angulo_rebanada_conectada * theta2) + center[1]
-    con = ConnectionPatch(xyA=(-width / 2, bar_height), coordsA=ax2.transData,
-                        xyB=(x, y), coordsB=ax1.transData)
-    
-    con.set_color([0 for i in range(len(ratios))])
-    con.set_linewidth(4)
-    ax2.add_artist(con)
+        theta1, theta2 = wedges[rebanada_a_conectar].theta1, wedges[rebanada_a_conectar].theta2
+        center, r = wedges[rebanada_a_conectar].center, wedges[rebanada_a_conectar].r
+        bar_height = sum(ratios)
 
-    x = r * np.cos(np.pi / angulo_rebanada_conectada * theta1) + center[0]
-    y = r * np.sin(np.pi / angulo_rebanada_conectada * theta1) + center[1]
-    con = ConnectionPatch(xyA=(-width / 2, 0), coordsA=ax2.transData,
-                        xyB=(x, y), coordsB=ax1.transData)
-    con.set_color([0 for i in range(len(ratios))])
-    ax2.add_artist(con)
-    con.set_linewidth(4)
+        x = r * np.cos(np.pi / angulo_rebanada_conectada * theta2) + center[0]
+        y = r * np.sin(np.pi / angulo_rebanada_conectada * theta2) + center[1]
+        con = ConnectionPatch(xyA=(-width / 2, bar_height), coordsA=ax2.transData,
+                            xyB=(x, y), coordsB=ax1.transData)
+        
+        con.set_color([0 for i in range(len(ratios))])
+        con.set_linewidth(4)
+        ax2.add_artist(con)
+
+        x = r * np.cos(np.pi / angulo_rebanada_conectada * theta1) + center[0]
+        y = r * np.sin(np.pi / angulo_rebanada_conectada * theta1) + center[1]
+        con = ConnectionPatch(xyA=(-width / 2, 0), coordsA=ax2.transData,
+                            xyB=(x, y), coordsB=ax1.transData)
+        con.set_color([0 for i in range(len(ratios))])
+        ax2.add_artist(con)
+        con.set_linewidth(4)
 
     return ax2
 
@@ -386,6 +391,18 @@ def str_a_dicc(input_str, conv=False):
             return diccionario
     except json.JSONDecodeError:
         return {}
+    
+
+def f_list_porcentaje(lista, a_string=False):
+    total=np.sum(lista)
+    list_per=[]
+    for n in lista:
+        if a_string:
+            list_per.append(f"{n / total}")
+        else:
+            list_per.append(n / total)
+    return list_per
+
 
 
 ##/

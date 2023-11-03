@@ -36,6 +36,7 @@
                     <option value="barras" {% if tipo_grafica_seleccionada == 'barras' %}selected{% endif %}>Gráfico de Barras</option>
                     <option value="dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %}selected{% endif %}>Gráfico de Dispersión</option>
                     <option value="pastel" {% if tipo_grafica_seleccionada == 'pastel' %}selected{% endif %}>Gráfico de Pastel</option>
+                    <option value="linea" {% if tipo_grafica_seleccionada == 'linea' %}selected{% endif %}>linea</option>
                 </select>
             </div>
 
@@ -257,6 +258,43 @@
                 </div>
             </div>
 
+            <!--opciones para el grafico de linea-->
+            <div id="opciones_linea", style="display: none;" class="opciones_ads colores">
+                
+                <!--area conectada-->
+                <div>
+                    <select name="linea_select_dat">
+                        <option value="mismos_datos_linea"{% if tipo_grafica_seleccionada == "linea" and opciones_ads[0] == "mismos_datos_linea" %}selected{% endif %}>mismos datos</option>
+                        <option value="nuevos_datos_linea"{% if tipo_grafica_seleccionada == "liena" and opciones_ads[0]=="nuevos_datos_linea" %}selected{% endif %}>nuevos datos</option>
+                    </select>
+                </div>
+                        <!--al seleccionarse la opcion de nuevos datos aparece la entrada para un nuevo file-->
+                <div id="entrada_nuevo_file_linea" name="entrada_nuevo_file_linea" style="display: none;">
+                    <label for="inp_entrada_nuevo_file_linea">nuevo file</label>
+                    <input type="file" id="inp_entrada_nuevo_file_linea" name="inp_entrada_nuevo_file_linea">
+                </div>
+                <!--/area conectada-->
+                
+                <div>
+                    <label for="inp_linea_segunda_linea_dx">fil o col</label>
+                    <input type="text" name="inp_linea_segunda_linea_dx" id="inp_linea_segunda_linea_dx">
+                </div>
+
+
+                <div>
+                    <label for="inp_linea_segunda_linea_dy">fil o col</label>
+                    <input type="text" name="inp_linea_segunda_linea_dy" name="inp_linea_segunda_linea_dx">
+                </div>
+
+                <div>
+                    <label for="liena_linewidth">line width</label>
+                    <input id="liena_linewidth" name="liena_linewidth" {% if tipo_grafica_seleccionada == "linea" %}value="{{ opciones_ads[2] }}"{% endif %}>
+                </div>
+
+                
+
+            </div>
+
 
 
             <div>
@@ -447,6 +485,11 @@
                                 <label for="titulo_barra_pastel">titulo</label>
                                 <input type="text" name="titulo_barra_pastel" name="titulo_barra_pastel">
 
+                                <div>
+                                    <label for="pastel_rebanada_conectada_barra">conectar a rebanada</label>
+                                    <input type="text" name="pastel_rebanada_conectada_barra" id="pastel_rebanada_conectada_barra">
+                                </div>
+
                             </div>
             
 
@@ -483,6 +526,53 @@
 
 
                         </div>
+
+
+                        <!--settings para la grafica de linea-->
+
+                        <div id="configuracion_linea" {%if tipo_grafica_seleccionada == "linea" %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+                            <div>
+                                <label for="select_linea_figextra">figura extra</label>
+                                <select name="select_linea_figextra">
+                                    <option value="--">--</option>
+                                    <option value="linea">linea</option>
+                                </select>
+                            </div>
+                            
+                            <!--settings figura extra de linea-->
+                            <div id="linea_figura_extra_settings_linea" name="linea_figura_extra_settings_linea" style="display: none;">
+                                <div>configuracion de figura extra</div>
+                                
+                                <div>
+                                    <select name="linea_fig_extra_nuev_dat" >
+                                        <option value="misma">misma</option>
+                                        <option value="nueva">nueva</option>
+                                    </select>
+                                </div>
+
+                                <div name="data_linea_linea_extra" id="input_data_linea_linea_extra" style="display: none;">
+                                    <label for="input_data_linea_linea_extra">file</label>
+                                    <input type="file" name="input_data_linea_linea_extra" id="input_data_linea_linea_extra">
+                                </div>
+
+                                <div>
+                                    <label for="linea_fila_y">fila</label>
+                                    <input type="text" id="linea_fila_y" name="linea_fila_y">
+                                </div>
+
+                                <div>
+                                    <label for="linea_fila_x">columna</label>
+                                    <input id="linea_fila_x" name="linea_fila_x">
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+
+
 
                     </div>
 
@@ -549,13 +639,14 @@
     const opcionesBarras = document.getElementById("opciones_barras");
     const opcionesDispersion = document.getElementById("opciones_dispersion");
     const opcionesPastel = document.getElementById("opciones_pastel");
-
+    const opcionesLinea = document.getElementById("opciones_linea");
     // Agrega un evento para escuchar cambios en la selección
     tipoGraficaSelect.addEventListener("change", function () {
         // Oculta todas las opciones adicionales primero 
         opcionesBarras.style.display = "none";
         opcionesDispersion.style.display = "none";
         opcionesPastel.style.display = "none";
+        opcionesLinea.style.display = "none";
 
         // Obtén el valor seleccionado
         const tipoGraficaSeleccionado = tipoGraficaSelect.value;
@@ -567,6 +658,8 @@
             opcionesDispersion.style.display = "block";
         } else if (tipoGraficaSeleccionado === "pastel") {
             opcionesPastel.style.display = "block";
+        } else if (tipoGraficaSeleccionado == "linea"){
+            opcionesLinea.style.display = "block"
         }
 
         const opcionesSeleccionadas = obtenerOpcionesSeleccionadas();  // Implementa esta función
@@ -783,5 +876,41 @@
             settingsBarraExtrPastel.style.display = "block";
         }
     });
+
+
+    // cosas para grafica de linea
+    // mostrar u ocultar la entrada para un nuevo file de csv
+
+    const selectorNuevoFileLinea = document.querySelector("select[name='linea_select_dat']")
+    const entradaNuevoFileLinea = document.getElementById("entrada_nuevo_file_linea2")
+
+    selectorNuevoFileLinea.addEventListener("change", function() {
+        entradaNuevoFileLinea.style.display = "none";
+        const fileLineaSeleccionado = selectorNuevoFileLinea.value;
+
+        if (fileLineaSeleccionado == "nuevos_datos_linea"){
+            entradaNuevoFileLinea.style.display = "block"
+        }
+
+
+    });
+
+    // mostrar u ocultar los settings para la figur estra de linea
+
+    const selectorFiguraExtraLinea = document.querySelector("select[name='select_linea_figextra']")
+    const settingsLineaFiguraExtraLinea = document.getElementById("linea_figura_extra_settings_linea")
+
+    selectorFiguraExtraLinea.addEventListener("change", function() {
+        settingsLineaFiguraExtraLinea.style.display = "none";
+
+        const figuraExtraLineaSeleccionada = selectorFiguraExtraLinea.value;
+
+        if (figuraExtraLineaSeleccionada == "linea"){
+            settingsLineaFiguraExtraLinea.style.display="block"
+        }
+        
+    });
+
+
 </script> 
 </html>

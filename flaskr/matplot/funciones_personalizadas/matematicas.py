@@ -6,11 +6,16 @@ from .funciones import get_keys_groups
 def cov_coef(x,y):
     return np.cov(x,y), np.cov(x,y)[0,1] / np.sqrt(np.cov(x,y)[0,0]*np.cov(x,y)[1,1])
 
-def list_porcentaje(lista):
+# la funcion 'list_porcentaje' simplemente toma una lista de numeros, y saca el porcentaje al que equivale cada
+# valor de la lista, es decir, si la lista es [2,2,2,2,2] toma uno a uno los valores, y devueve [.20,.20,.20,.20,.20] osea veinte porciento cada uno
+def list_porcentaje(lista, a_string=False):
     total=np.sum(lista)
     list_per=[]
     for n in lista:
-        list_per.append(n / total)
+        if a_string:
+            list_per.append(f"{n / total}")
+        else:
+            list_per.append(n / total)
     return list_per
 
 def conectin_x_y_line(r,pos_ange,theta,center):

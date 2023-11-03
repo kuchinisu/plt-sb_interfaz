@@ -10,3 +10,18 @@ pero luego me decidí a aprender a usar flask y sus heramientas como jinja, cuan
 de la pagina de flask y completar el proyecto tutorial de esta misma pagina fue cuando me puse a desarrollar 
 este proyecto, por lo que dentro de este encontrarás cosas de la documentacion de flask, como el blog simple
 y el modo d crear posts de este, tmb en el init definida la pagina de hellow word y otras cosillas
+
+
+==========================hacerlo funcionar=====================
+para hacer funcionar el proyecto, primero tienes que activar tu virtualenv el cual ya debe tener instalados
+los requerimientos del archivo requeriments.txt
+
+la estructura de la carpeta debe mantenerse así:
+
+carpeta_principal/(ponle o cambia el nombe q ocupes)
+    -env(tu entorno virtual creado)
+    -flaskr/(todas las cosas de la app que ya viene hecha)
+    -instance/(crea esta carpeta manualmente)
+        ..flaskr.sqlite(y crea este archivo)
+
+enstando en la ubicacion 'carpeta_principal/' en la terminal ejecutas el comando, flask -app run --debug
