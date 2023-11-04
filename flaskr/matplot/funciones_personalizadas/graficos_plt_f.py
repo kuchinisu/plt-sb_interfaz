@@ -10,12 +10,12 @@ from .funciones import *
 
 def grafica_plot(x, y, ax1, tot_list):
     args_t, lista_editor, fig_extra_settings = tot_list
+    
     x_2, y_2, linewidth = args_t
     fig_extra = lista_editor[0]#por ahora esta así, ya que la lista tiene solo un elemento, por lo tanto
                                 # no de desempaqueta el valor NoneType, la variable es tipo lista y como no es NoneType
                                 # se cumple la condicion de que no es None, por lo que crea 2 figuras
 
-    
     if x_2 is None or y_2 is None:
         x_2=np.array([0 for i in range(x.shape[0])]).astype(float)
         y_2=np.array([0 for i in range(x.shape[0])]).astype(float)
@@ -29,7 +29,8 @@ def grafica_plot(x, y, ax1, tot_list):
         fig, (ax1, ax2) = plt.subplots(2, 1, layout='constrained' )
         retorna1=False
     else:
-        fig, ax1 = plt.subplots()
+        if ax1 is None:
+            fig, ax1 = plt.subplots()
         retorna1=True
     
 
@@ -43,9 +44,10 @@ def grafica_plot(x, y, ax1, tot_list):
     else:
         if fig_extra_settings is not None:
 
-            if fig_extra == "plot":
+            if fig_extra == "linea":
+
+                x_f, y_f, tot_list_fig_extra = fig_extra_settings
                 
-                x_f, y_f, tot_list_fig_extra= fig_extra_settings
                 ax2 = grafica_plot(x_f, y_f, ax2, tot_list_fig_extra)
 
         return ax1, ax2
@@ -99,17 +101,19 @@ def dispercion(x, y, ax, args_t, **kwargs):
         ax.axvline(c="grey", lw=1)
         ax.axhline(c="grey", lw=1)
 
-        if isinstance(trazos, list):
-            for trazo in trazos:
-                if arg_trazos is True:
-                    dict_functs(trazo, x, y, ax, **kwargs)
-                else:
-                    dict_functs(trazo, x, y, ax)
-        elif isinstance(trazos, str):
-                if arg_trazos is True:
-                    dict_functs(trazos, x, y, ax, **kwargs)
-                else:
-                    dict_functs(trazos, x, y, ax)
+        if trazos is not None:
+
+            if isinstance(trazos, list):
+                for trazo in trazos:
+                    if arg_trazos is True:
+                        dict_functs(trazo, x, y, ax, **kwargs)
+                    else:
+                        dict_functs(trazo, x, y, ax)
+            elif isinstance(trazos, str):
+                    if arg_trazos is True:
+                        dict_functs(trazos, x, y, ax, **kwargs)
+                    else:
+                        dict_functs(trazos, x, y, ax)
 
         mean_x = np.mean(x)
         mean_y = np.mean(y)
@@ -238,8 +242,6 @@ def pastel(x,y,ax, tot_list ):
     if fig_extra is not None:
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5))
         fig.subplots_adjust(wspace=0)
-
-    
 
     else:
         fig, ax1 = plt.subplots()

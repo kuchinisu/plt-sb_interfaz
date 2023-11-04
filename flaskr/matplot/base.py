@@ -7,7 +7,8 @@ from random import randint
 def controlador(rut,ui,pad, x_or, y_or, x, y, mando, args_t, **kwargs):
     x , y = get_datas(x_or,y_or,x,y,pad) #cuando recibe el numero de las fials y sus orientaciones obtiene los datos ya en array
     print(x, y)
-    fig, ax, = plt.subplots()
+    #fig, ax, = plt.subplots()
+    ax=None
 
     x, y = float_type_grafica(x,y,mando)
     

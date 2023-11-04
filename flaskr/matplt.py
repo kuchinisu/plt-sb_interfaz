@@ -143,6 +143,8 @@ def obtener_opciones_dispercion():
 
     titulo = request.form['titulo_dispersion']
     trazos = request.form['trazos_dispersion']
+    if not trazos:
+        trazos = None
     arg_trazos = request.form['arg_trazos']
 
     select_mean_color=request.form.get('tipo_mean_color_dispersion')
@@ -421,7 +423,11 @@ def obtener_lista_linea(array_contenido):
 
     settings = obtener_settings_linea(array_contenido)
 
-    listas=[lista_args, settings, [None]]
+    if settings[0] == "linea":
+        settings_figura_extra=get_linea_linea(array_contenido)
+    else:
+        settings_figura_extra = [None]
+    listas=[lista_args, settings, settings_figura_extra]
     return listas
 
 def obtener_settings_linea(array_contenido):
@@ -440,31 +446,92 @@ def obtener_settings_linea(array_contenido):
 
     return settings
 
+
+
+# la funcion 'get_linea_linea' obtiene los argumentos para agegar una linea adicional
+# a la grafica de linea
 def get_linea_linea(array_contenido):
-    """
+    
+    # args_principales
+        # informacion del selector, para elegir en reutilizar el array
+        # de datos o tomar el nuevo archivo proporcionado se se proporcionó 
     nueva_file=request.form.get('linea_fig_extra_nuev_dat')
-    if nueva_file == 'mismos_datos_linea':
+    
+    if nueva_file == 'misma':
         contenido=array_contenido
-    elif nueva_file == 'nuevos_datos_linea':
-        contenido=request.form['entrada_arch_barra_pastel_input']
+    elif nueva_file == 'nueva':
+        contenido=request.form['input_data_linea_linea_extra']
+        contenido=pd.read_csv(contenido)
+    
+    #toma las filas y columnas para la nueva grafica de linea
+    filas=request.form['linea_fila_y']
+    columnas=request.form['linea_fila_x']
+    
+    # si ambas existen se busca los datos de esas filas en el array nuevo o reutilizado
+    if filas and columnas:
+        x_, xhor = num_or(filas) #  toma el index de la fila o columna y pasa la informacion que 
+                                    # indica si buscarla en [0] o en [1] osea x o y
+        y_, yhor = num_or(columnas) 
+        x,y=get_datas(xhor,yhor,x_,y_,array_contenido) # toma el indice de la columna o fila, toma el argumento de si es fila o columna y toma el array del cual se
+                                                        # va a sacar, y devuelve el 'x' y 'y' 
+    #si no existe entonces se inicializan en 0, 0
+    else:
+        x=[0]
+        y=[0]
+
+
+
+    # settings-extras
+            # toma los settings extras para la grafica de linea adicional
+            # estos settings extras son similares a los de la grafica de linea normal
+            # y son pasados en una lista similar a la que es pasada la grafica de linea normal
+            # ya que esta grafica adicional se crea dentro de la funcion de la grafica de linea
+            # pero llamandose a sí misma, es decir, si se le indica que la grafica adicional será otra de linea
+            # se cumple una condicion dentro de la funcion de 'grafica_plot' donde esta se llama así misma,
+            # por lo que se deben proporcionar los argumentos extras de una forma similar a la que se le proporcionaron
+            # para la grafica original
+
+
+
+
+    select_nuevos_datos=request.form.get('selector_nuev_dat_segundalinea_linea_extra')
+    if select_nuevos_datos:
+        if select_nuevos_datos=="nuevos":
+            contenido_extr="inp_nuev_dat_segundalinea_linea_extra"
+            contenido_extr=pd.read_csv(contenido_extr)
+    elif select_nuevos_datos == "mismos":
+        contenido_extr=array_contenido
+    else:
+        raise ValueError("error no hay ninguno")
     
 
-    filas=request.form['inp_linea_segunda_linea_dx']
-    columnas=request.form['inp_linea_segunda_linea_dy']
+    segunda_fila_linea_extra = request.form['inp_ej_y_segunda_linea_linea_extra_linea']
+    segunda_columna_linea_extra = request.form['inp_ej_x_segunda_linea_linea_extra_linea']
 
-    if filas and columnas:
+    if segunda_fila_linea_extra and segunda_columna_linea_extra:
         x_, xhor = num_or(filas)
         y_, yhor = num_or(columnas) 
-        x,y=get_datas(xhor,yhor,x_,y_,array_contenido)
 
-    lista=[x, y, "1"]
-    settings=[None]
-    fig_extra=[None]
+        x_extra,y_extra=get_datas(xhor,yhor,x_,y_,array_contenido)
+    else:
+        x_extra,y_extra=([0],[0])
 
-    total=[lista,settings,fig_extra]
-    """
-    return 
+    
+    linewidth=request.form['entrada_linewidth_linea_extra_linea']
 
+    if not linewidth:
+        linewidth=1
+    
+    
+
+    args_list=[x_extra,y_extra,linewidth]
+
+    lista_princ=[x,y,[args_list, [None], None]]
+    
+    
+    return lista_princ
+    #la funcion 'get_linea_linea' es tal vez la función más confusa de todo 
+    # el proyecto, o al menos es la más confusa de escribir
 ################ end linea ###################
 
 def obtener_lista_de_str(inp_lista):

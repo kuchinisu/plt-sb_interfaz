@@ -311,37 +311,57 @@ def multiples_columnas(cadena):
 #los argumentos enviados por el formulario html son todos str, pero son mandados de una forma en la que sugieren el tipo
 #de variable que pretende ser, los que se supone que deben ser int los manda '12' los float '1.0' incluslo las tuplas las 
 #envía como '(1,4)' y así y así, la funcion 'list_args_conver' identifica el tipo de variable que sugieren ser y las convierte
+
 def list_args_convert(listas):
     
     lista_args=[]
-    for lista in listas:
+    
+    # el ciclo espera recibir una lista de listas, estas listas son los tipos de argumento que esperan
+    # las funciones que generan los graficos, en el archivo '.graficos_plt_f.py
+    
+    for lista in listas: # toma cada lista dentro de la lista de listas
         args_procesados = []
-        print(f"la lista en la que se va iterar contiene {lista}")
-        for l in lista:
+        
+        for l in lista: # toma cada elemento de la lista
             if l is not None:
+                # si el elemento dentro de la lista resulta ser otra lista
+                # la funcion se llama a sí misma y convierte sus elementos, si da excepcion
+                # simplemente se pasa y se guarda como está
                 if isinstance(l, list):
-                    mini_lista = list_args_convert(l)
-                    args_procesados.append(mini_lista)
+                    try:
+                        mini_lista = list_args_convert(l)
+                        args_procesados.append(mini_lista)
+                    except:
+                        args_procesados.append(l)
+                #si no es una lista se hará el procedimiento de conversion normal
                 else:
                     caracteres=re.compile(r'[a-z]')
-                    if isinstance(l, str):
+
+                    # primero se verifica si el elemento es str, para poder cambiarlo de str a otro tipo
+                    if isinstance(l, str): 
+                        
+                        # convertir a un tipo que contiene numeros pero que no es una tupla y no tiene letras
                         if contiene_numero(l) and "(" not in l and any(c.isalpha() for c in l) is False:
+                            #convertir a float
                             if '.' in l:
                                 print(f"contenido de: {l} tipo {type(l)}")
                                 args_procesados.append(float(l.strip()))
+                            #converir a int
                             else:
                                 args_procesados.append(int(l.strip()))
 
+                        # convertir a bool
                         elif isinstance(es_booleano(l.strip()), bool):
                             args_procesados.append(es_booleano(l.strip()))
                         
+                        # converit a tupla
                         elif '(' in l and ')' in l and contiene_numero(l):
-                            a_replace=[')','(', ',']
+                            a_replace=[')','(', ',']# elimina los caracteres que indican ser tupla
                             for a_rep in a_replace:
                                 l = l.replace(a_rep, ' ')
 
-                            tuo_list = [int(dig.strip()) for dig in l.split()]
-                            tupla = tuple(tuo_list)
+                            tuo_list = [int(dig.strip()) for dig in l.split()]#convierte sus elementos str a int
+                            tupla = tuple(tuo_list) # y se guardan en una tupla
 
                             args_procesados.append(tupla)
 
@@ -355,6 +375,8 @@ def list_args_convert(listas):
         lista_args.append(args_procesados)
 
     return lista_args
+    # la funcion 'list_args_convert' es una de las funciones más raras en este proyecto
+    # devido a la forma en la que convierte a los elementos
 
 
 def get_keys_groups(x_f,y_f):

@@ -565,6 +565,40 @@
                                     <input id="linea_fila_x" name="linea_fila_x">
                                 </div>
 
+                                
+
+                                <div>segunda linea</div>
+
+                                <div>
+                                    <label for="selector_nuev_dat_segundalinea_linea_extra"></label>
+                                    <select name="selector_nuev_dat_segundalinea_linea_extra">
+                                        <option value="mismos">mismos datos</option>
+                                        <option value="nuevos">nuevos datos</option>
+                                    </select>
+                                </div>
+                                    <!--al seleccionarse nuevos se mostrará la entrada para el nuevo file-->
+
+                                <div name="div_nuev_dat_segundalinea_linea_extra" id="div_nuev_dat_segundalinea_linea_extra" style="display: none;">
+                                    <label for="inp_nuev_dat_segundalinea_linea_extra">entrada de archivo</label>
+                                    <input type="file" id="inp_nuev_dat_segundalinea_linea_extra" name="inp_nuev_dat_segundalinea_linea_extra">
+                                </div>
+
+
+                                <div>
+                                    <label for="inp_ej_y_segunda_linea_linea_extra_linea">fila</label>
+                                    <input type="text" id="inp_ej_y_segunda_linea_linea_extra_linea" name="inp_ej_y_segunda_linea_linea_extra_linea">
+                                </div>
+                                
+                                <div>
+                                    <label for="inp_ej_x_segunda_linea_linea_extra_linea">fila</label>
+                                    <input type="text" id="inp_ej_x_segunda_linea_linea_extra_linea" name="inp_ej_x_segunda_linea_linea_extra_linea">
+                                </div>
+
+                                <div>
+                                    <label for="entrada_linewidth_linea_extra_linea">linewidth</label>
+                                    <input type="text" id="entrada_linewidth_linea_extra_linea" name="entrada_linewidth_linea_extra_linea">
+                                </div>
+
 
 
                             </div>
@@ -909,6 +943,22 @@
             settingsLineaFiguraExtraLinea.style.display="block"
         }
         
+    });
+
+    //mostrar u ocultar una nueva entrada para archivos en linea extra para linea
+    //data_linea_linea_extra
+    const selectorNuevosDatosLineaDeLinea = document.querySelector["select[name='linea_fig_extra_nuev_dat']"];
+    const inputNuevosDatosLineaLinea = document.getElementById("input_data_linea_linea_extra")
+
+    selectorNuevosDatosLineaDeLinea.addEventListener("change", function() {
+        inputNuevosDatosLineaLinea.style.display = "none";
+
+        const nuevosDatosLineaDeLineaSeleccionado = selectorNuevosDatosLineaDeLinea.value;
+
+        if (nuevosDatosLineaDeLineaSeleccionado === "nueva"){
+            inputNuevosDatosLineaLinea.style.display = "block";
+        }
+
     });
 
 
