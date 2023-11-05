@@ -36,14 +36,20 @@ def float_type_grafica(x_,y_,comando):
     y=y_
 
     if x is not None:
-        if isinstance(x[0], (int, float)):
-            x = x.astype(float)
+        if isinstance(x, list):
+            if isinstance(x[0], (int, float)):
+                x = x.astype(float)
+        else:
+            x = x
     else:
-        x=x
+        x = x
 
     if y is not None:
-        if isinstance(y[0], (int, float)):
-            y = y.astype(float)
+        if isinstance(y,list):
+            if isinstance(y[0], (int, float)):
+                y = y.astype(float)
+        else:
+            y = y
     else:
         y = y
 

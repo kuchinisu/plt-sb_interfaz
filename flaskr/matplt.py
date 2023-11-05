@@ -67,12 +67,14 @@ def gener():
                                         # en vertical u horizontal, esto lo pide así la funcion de controlador más adelante 
         else:
             cual_a_generar = request.form.get("selector_generar_x_generar_y")
+            metodo = request.form.get("generar_eje_por_metodo")
+            
             if cual_a_generar == "generar_x":
-                y, yhor = num_or(filas)
-                x, xhor = (None, None)
+                y, yhor = num_or(columnas)
+                x, xhor = (metodo, None)
             else:
                 x, xhor = num_or(columnas)
-                y,yhor = (None, None)
+                y, yhor = (metodo, None)
         
         #llama a la funcion para obtener los datos del formulario según el tipo de grafica escogida
         if tipo_grafica_seleccionado == 'barras':

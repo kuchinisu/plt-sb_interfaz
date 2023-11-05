@@ -15,11 +15,17 @@ def grafica_plot(x, y, ax1, tot_list):
     fig_extra = lista_editor[0]#por ahora esta así, ya que la lista tiene solo un elemento, por lo tanto
                                 # no de desempaqueta el valor NoneType, la variable es tipo lista y como no es NoneType
                                 # se cumple la condicion de que no es None, por lo que crea 2 figuras
+    if isinstance(x, str):
+        if x == "seno":
+            x = np.sin(y)
+        elif x == "coseno":
+            x = np.cos(y)
 
-    if x is None:
-        x = np.cos(y)
-    elif y is None:
-        y = np.cos(x)
+    elif isinstance(y, str):
+        if y == "seno":
+            y = np.sin(x)
+        elif y == "coseno":
+            y = np.cos(x)
 
 
     if x_2 is None or y_2 is None:
@@ -42,8 +48,8 @@ def grafica_plot(x, y, ax1, tot_list):
 
     ax1.plot(x, y, x_2,y_2, linewidth=linewidth)
 
-    ax1.set(xlim=(0, len(x)), xticks=np.arange(1, len(x)),
-        ylim=(0, len(y)), yticks=np.arange(1, len(y)))
+    #ax1.set(xlim=(0, len(x)), xticks=np.arange(1, len(x)),
+    #    ylim=(0, len(y)), yticks=np.arange(1, len(y)))
 
     if retorna1:
         return ax1
