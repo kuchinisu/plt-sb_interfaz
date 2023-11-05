@@ -16,6 +16,12 @@ def grafica_plot(x, y, ax1, tot_list):
                                 # no de desempaqueta el valor NoneType, la variable es tipo lista y como no es NoneType
                                 # se cumple la condicion de que no es None, por lo que crea 2 figuras
 
+    if x is None:
+        x = np.cos(y)
+    elif y is None:
+        y = np.cos(x)
+
+
     if x_2 is None or y_2 is None:
         x_2=np.array([0 for i in range(x.shape[0])]).astype(float)
         y_2=np.array([0 for i in range(x.shape[0])]).astype(float)
@@ -165,7 +171,7 @@ def barras(x, y, ax, vars_t):
         if figzise is None:
             fig, ax = plt.subplots()
         else:
-            fig, ax = plt.subplots(figzise=figzise)
+            fig, ax = plt.subplots()
 
     x, y = agrupado_dict(agrupado)(x,y)
 

@@ -243,17 +243,23 @@ def get_datas(x_or,y_or,x_,y_,pad):
 
 def get_x_y(datos,x,y,x_orient="h",y_orient="v"):
     datos=datos.values
-       
-    if x_orient == "h":
-        x=datos[x,:]
+    
+    if not x_orient is None:
+        if x_orient == "h":
+            x=datos[x,:]
+        else:
+            
+            x=datos[:,x]
     else:
-        
-        x=datos[:,x]
+        x=x
 
-    if y_orient == "v":
-        y=datos[:,y]
+    if not y_orient is None:
+        if y_orient == "v":
+            y=datos[:,y]
+        else:
+            y=datos[y,:]
     else:
-        y=datos[y,:]
+        y=y
         
     return x, y
 

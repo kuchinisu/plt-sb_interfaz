@@ -250,3 +250,27 @@ input[type=submit] { align-self: start; min-width: 10em; }
 
 
 /* no soy bueno en css*/
+
+
+
+
+/* Estilo para el contenedor de la imagen */
+.image-container {
+    position: relative;
+}
+
+/* Estilo para la imagen a pantalla completa */
+.full-screen-image {
+    cursor: pointer;
+}
+
+/* Estilo para el botón de cierre */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}

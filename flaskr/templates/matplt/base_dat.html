@@ -17,30 +17,62 @@
                 <input type="file" name="archivo" accept=".csv, .xlsx">
                 <input type="text" name="array_escondido" id="array_escondido" {% if array %} value="{{ array }}" {% endif %} style="display: none;">
                 <input type="text" name="uii_oculto" id="uii_oculto" value="{{ uuid_r }}" style="display: none;">
-            
-            <div>
+
+                
+
                 
                 <div>
-                    <label for="filas">Filas</label>
-                    <input type="text" name="filas" value="{{ filas_ }}"  required>
-                </div>
-                <div>
-                    <label for="columnas">Columnas:</label>
-                    <input type="text" name="columnas" value="{{ columnas_ }}" required>
+                    <label for="tipo_grafica">Tipo de Gráfica:</label>
+                    <select name="tipo_grafica">
+                        <option value="--">---</option>
+                        <option value="barras" {% if tipo_grafica_seleccionada == 'barras' %}selected{% endif %}>Gráfico de Barras</option>
+                        <option value="dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %}selected{% endif %}>Gráfico de Dispersión</option>
+                        <option value="pastel" {% if tipo_grafica_seleccionada == 'pastel' %}selected{% endif %}>Gráfico de Pastel</option>
+                        <option value="linea" {% if tipo_grafica_seleccionada == 'linea' %}selected{% endif %}>linea</option>
+                    </select>
                 </div>
 
+                <!--opciones generales que se muestran al seleccionar un tipo de grafica-->
+                <div id="opciones_generales"  style="display: none;">
 
-                <label for="tipo_grafica">Tipo de Gráfica:</label>
-                <select name="tipo_grafica">
-                    <option value="--">---</option>
-                    <option value="barras" {% if tipo_grafica_seleccionada == 'barras' %}selected{% endif %}>Gráfico de Barras</option>
-                    <option value="dispersion" {% if tipo_grafica_seleccionada == 'dispersion' %}selected{% endif %}>Gráfico de Dispersión</option>
-                    <option value="pastel" {% if tipo_grafica_seleccionada == 'pastel' %}selected{% endif %}>Gráfico de Pastel</option>
-                    <option value="linea" {% if tipo_grafica_seleccionada == 'linea' %}selected{% endif %}>linea</option>
-                </select>
+                    <!--selector para graficos de lineas, selecciona si mostrar 2 entradas o solo una
+                    esta está conectada al div 'div_selector_generar_x_generar_y' que selecciona cual cual eje se generará a partir de 
+                    estos-->
+                    <div id="div_selector_uno_o_dos_entradas" style="display: none;">   
+                        <select name="selector_uno_o_dos_entradas">
+                            <option value="dos">2 ejes</option>
+                            <option value="uno">generar el segundo eje</option>
+                        </select>
+                    </div>
+                    <!-- / -->
+
+                    <div id="div_filas">
+                        <label for="filas">Filas</label>
+                        <input type="text" name="filas" value="{{ filas_ }}">
+                    </div>
+
+                    <div>
+                        <label for="columnas">Columnas:</label>
+                        <input type="text" name="columnas" value="{{ columnas_ }}" required>
+                    </div>
+                    
+                    <!-- conectada con el selector 'selector_uno_o_dos_entradas'-->
+                    <div id="div_selector_generar_x_generar_y" style="display: none;">
+                        <select name="selector_generar_x_generar_y">
+                            <option value="generar_x">generar a x</option>
+                            <option value="generar_y">generar a y</option>
+                        </select>
+                    </div>
+
+                    
+                </div>
+
             </div>
 
+
         </div>
+
+
             <!-- Opciones para Gráfico de Barras -->
             <div id="opciones_barras" style="display: none;" class="opciones_ads colores">
                 <!-- Campos de entrada para opciones de gráfica de barras -->
@@ -306,9 +338,11 @@
                 <div class="container colores">
 
                     <div class="image-container">
-                        <img src="{{ url_for('static', filename='show/' ~ fig ~ '.png') }}" alt="Imagen 1">
-                
+                        <img src="{{ url_for('static', filename='show/' ~ fig ~ '.png') }}" alt="Imagen 1" class="full-screen-image">
+                        <div class="close-button" onclick="closeFullScreen()">X</div>
                     </div>
+                    
+                    
                     <!-- settings -->
                     <div class="config-container">       
                         <div>configuracion</div>
@@ -674,6 +708,10 @@
     const opcionesDispersion = document.getElementById("opciones_dispersion");
     const opcionesPastel = document.getElementById("opciones_pastel");
     const opcionesLinea = document.getElementById("opciones_linea");
+    const opcionesGenerales = document.getElementById("opciones_generales");
+    const selectDosFilasUnaFila = document.getElementById("div_selector_uno_o_dos_entradas");
+    
+
     // Agrega un evento para escuchar cambios en la selección
     tipoGraficaSelect.addEventListener("change", function () {
         // Oculta todas las opciones adicionales primero 
@@ -681,11 +719,20 @@
         opcionesDispersion.style.display = "none";
         opcionesPastel.style.display = "none";
         opcionesLinea.style.display = "none";
+        opcionesGenerales.style.display = "none";
+        selectDosFilasUnaFila.style.display = "none";
+        
+
+
 
         // Obtén el valor seleccionado
         const tipoGraficaSeleccionado = tipoGraficaSelect.value;
 
-        // Muestra las opciones adicionales según el tipo de gráfico seleccionado
+        // muestra las opciones generales si hay un tipo de grafica seleccinada
+        if(tipoGraficaSeleccionado !== "--"){
+            opcionesGenerales.style.display = "block";
+
+            // Muestra las opciones adicionales según el tipo de gráfico seleccionado
         if (tipoGraficaSeleccionado === "barras") {
             opcionesBarras.style.display = "block";
         } else if (tipoGraficaSeleccionado === "dispersion") {
@@ -693,10 +740,14 @@
         } else if (tipoGraficaSeleccionado === "pastel") {
             opcionesPastel.style.display = "block";
         } else if (tipoGraficaSeleccionado == "linea"){
-            opcionesLinea.style.display = "block"
+            opcionesLinea.style.display = "block";
+            selectDosFilasUnaFila.style.display = "block";
+            
+            
         }
 
-        const opcionesSeleccionadas = obtenerOpcionesSeleccionadas();  // Implementa esta función
+
+        };
 
         // Establecer las opciones en los campos ocultos
         if (tipoGraficaSeleccionado === "barras") {
@@ -708,6 +759,25 @@
         }
 
     });
+
+
+    const selectorUnaFilasODos = document.querySelector("select[name='selector_uno_o_dos_entradas']")
+    const inpFilas = document.getElementById("div_filas")
+    const generarXyY = document.getElementById("div_selector_generar_x_generar_y")
+
+
+    selectorUnaFilasODos.addEventListener("change", function(){
+        inpFilas.style.display="block"
+        generarXyY.style.display = "none";
+
+        const filasUnaFilaSeleccionada = selectorUnaFilasODos.value;
+
+        if(filasUnaFilaSeleccionada === "uno"){
+            inpFilas.style.display = "none"
+            generarXyY.style.display = "block"
+        }
+    });
+
     // principal end/
 
 

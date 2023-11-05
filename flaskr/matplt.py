@@ -59,11 +59,20 @@ def gener():
         filas=request.form['filas']
         columnas=request.form['columnas']
 
-        x, xhor = num_or(filas)
-        y, yhor = num_or(columnas)# funciones dentro del archivo funciones.py, toman la letra o numero de las 
-                                    #filas o culumnas del archivo csv o excel y devuelven a q numero equivalen y si están
-                                    # en vertical u horizontal, esto lo pide así la funcion de controlador más adelante 
-
+        una_o_dos_entradas=request.form.get("selector_uno_o_dos_entradas")
+        if una_o_dos_entradas == "dos":
+            x, xhor = num_or(filas)
+            y, yhor = num_or(columnas)# funciones dentro del archivo funciones.py, toman la letra o numero de las 
+                                        #filas o culumnas del archivo csv o excel y devuelven a q numero equivalen y si están
+                                        # en vertical u horizontal, esto lo pide así la funcion de controlador más adelante 
+        else:
+            cual_a_generar = request.form.get("selector_generar_x_generar_y")
+            if cual_a_generar == "generar_x":
+                y, yhor = num_or(filas)
+                x, xhor = (None, None)
+            else:
+                x, xhor = num_or(columnas)
+                y,yhor = (None, None)
         
         #llama a la funcion para obtener los datos del formulario según el tipo de grafica escogida
         if tipo_grafica_seleccionado == 'barras':
